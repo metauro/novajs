@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "moduleResolution": "node",
+    "declaration": true,
+    "removeComments": false,
+    "pretty": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "keyofStringsOnly": true,
+    "useDefineForClassFields": true,
+    "lib": ["es6"],
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": "./"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "test"]
+}

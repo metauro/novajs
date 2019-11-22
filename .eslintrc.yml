@@ -1,0 +1,22 @@
+parser: '@typescript-eslint/parser'
+extends:
+  - 'plugin:@typescript-eslint/recommended'
+  - 'prettier'
+  - 'prettier/@typescript-eslint'
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: 'module'
+rules:
+  quotes:
+    - 2
+    - 'single'
+  unified-signatures: 0
+  interface-over-type-literal: 0
+  arrow-parens: 0
+  '@typescript-eslint/ban-types': 0
+  '@typescript-eslint/interface-name-prefix':
+    - 2
+    - prefixWithI: 'always'
+  '@typescript-eslint/no-explicit-any': 0
+  '@typescript-eslint/no-empty-interface': 0
+  '@typescript-eslint/explicit-function-return-type': 0

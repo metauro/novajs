@@ -1,0 +1,11 @@
+/.idea
+/.vscode
+/test
+/test-dist
+.DS_Store
+.prettierrc.yaml
+yarn.lock
+nodemon.test.json
+tsconfig.json
+tsconfig.test.json
+tsconfig.build.json
