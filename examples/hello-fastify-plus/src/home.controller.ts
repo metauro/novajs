@@ -11,7 +11,6 @@ export class HomeController {
     @RequestQuery() dto: HomeIndexRequest,
     request: HttpRequest,
   ): HomeIndexResponse {
-    console.log(dto);
     return this.homeService.getIndex(dto);
   }
 }
