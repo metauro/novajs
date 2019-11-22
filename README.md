@@ -81,3 +81,9 @@ bootstrap();
 ```
 
 now, you can access your api in http://127.0.0.1:3000/?id=2
+
+### todos
+
+- [ ] support swagger document
+- [ ] support property inject
+- [ ] get controller route param and generate schema
