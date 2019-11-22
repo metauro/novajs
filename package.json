@@ -5,11 +5,17 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metauro/fastify-plus"
+  },
   "scripts": {
+    "clean": "rimraf dist",
     "lint": "eslint 'src/**/*.ts' --fix",
     "format": "prettier src/**/*.ts --write",
     "build:watch": "tsc -w -p tsconfig.json",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "yarn clean && yarn build"
   },
   "husky": {
     "hooks": {
@@ -63,6 +69,7 @@
     "husky": "^3.1.0",
     "lint-staged": "^9.4.3",
     "nodemon": "^1.19.4",
+    "rimraf": "^3.0.0",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2",
     "wait-on": "^3.3.0"
