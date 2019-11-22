@@ -35,6 +35,6 @@ export const RequestHeaders = createRequestData('headers');
 
 export const RequestParams = createRequestData('params');
 
-export const RequestQuery = createRequestData('querystring');
+export const RequestQuery = createRequestData('query');
 
 export const RequestBody = createRequestData('body');

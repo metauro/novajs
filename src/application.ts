@@ -3,12 +3,9 @@ import { ReflectiveInjector } from 'injection-js';
 import { KlassScanner } from './scanners';
 import { ApplicationContext, ApplicationOptions } from './interfaces';
 import { internalLoggerService } from './services';
-import { Class } from 'utility-types';
 import { Controller } from './controller';
 
 export class FastifyPlusApplication {
-  protected instanceMap: Map<Class<any>, object> = new Map();
-
   constructor(protected readonly ctx: ApplicationContext) {}
 
   static async create(
@@ -17,7 +14,9 @@ export class FastifyPlusApplication {
   ) {
     return new FastifyPlusApplication({
       http,
-      injector: null,
+      injector: ReflectiveInjector.resolveAndCreate(
+        (await KlassScanner.scan(options.appRootPath)).map(k => k.type),
+      ),
       ...options,
     });
   }
@@ -27,13 +26,7 @@ export class FastifyPlusApplication {
   }
 
   public async start(port: number, address?: string) {
-    const { appRootPath } = this.ctx;
-    const klasses = await KlassScanner.scan(appRootPath);
-    this.ctx.injector = ReflectiveInjector.resolveAndCreate(
-      klasses.map(k => k.type),
-    );
     const controller = new Controller(this.ctx);
-
     await controller.registerControllers();
     await this.listen(port, address);
   }
@@ -47,18 +40,5 @@ export class FastifyPlusApplication {
 
       internalLoggerService.info(`The server has listen on ${address}`);
     });
-
-    const handleExit = async err => {
-      console.error(err);
-      await http.close();
-      process.exit(0);
-    };
-
-    process.on('SIGINT', handleExit);
-    process.on('exit', handleExit);
-    process.on('SIGUSR1', handleExit);
-    process.on('SIGUSR2', handleExit);
-    process.on('uncaughtException', handleExit);
-    process.on('unhandledRejection', handleExit);
   }
 }

@@ -7,6 +7,7 @@ export class Controller {
 
   public async registerControllers() {
     const { appRootPath, injector, http } = this.ctx;
+
     for (const controller of await ControllerScanner.scan(appRootPath)) {
       internalLoggerService.info(
         `found controller: ${controller.klass.type.name}`,

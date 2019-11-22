@@ -10,7 +10,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "keyofStringsOnly": true,
-    "useDefineForClassFields": true,
     "lib": ["es6"],
     "sourceMap": true,
     "outDir": "dist",

@@ -26,7 +26,7 @@ export class ControllerScanner {
     for (const klass of klasses) {
       const controllerMetadata = ReflectTool.getMetadata<ControllerMetadata>(
         CONTROLLER_METADATA_KEY,
-        klass,
+        klass.type,
       );
 
       if (!controllerMetadata) {
@@ -34,10 +34,10 @@ export class ControllerScanner {
       }
 
       const routes: ControllerRoute[] = [];
-      for (const key of KlassTool.getOwnerFunctionKeys(klass.prototype)) {
+      for (const key of KlassTool.getOwnerFunctionKeys(klass.type.prototype)) {
         const requestMappingMetadata = ReflectTool.getMetadata<
           RequestMappingMetadata
-        >(REQUEST_MAPPING_METADATA_KEY, klass.prototype, key);
+        >(REQUEST_MAPPING_METADATA_KEY, klass.type.prototype, key);
 
         if (!requestMappingMetadata) {
           continue;
@@ -46,7 +46,7 @@ export class ControllerScanner {
         const params: ControllerParam[] = (
           ReflectTool.getMetadata<Array<Class<any>>>(
             PARAM_TYPES_METADATA_KEY,
-            klass.prototype,
+            klass.type.prototype,
             key,
           ) || []
         ).map(t => ({
@@ -57,7 +57,7 @@ export class ControllerScanner {
         const requestDataMetadata =
           ReflectTool.getMetadata<RequestDataMetadata[]>(
             REQUEST_DATA_METADATA_KEY,
-            klass.prototype,
+            klass.type.prototype,
             key,
           ) || [];
 
@@ -67,7 +67,7 @@ export class ControllerScanner {
 
         routes.push({
           key,
-          handler: klass.prototype[key],
+          handler: klass.type.prototype[key],
           path:
             controllerMetadata.prefix +
             (requestMappingMetadata.path
@@ -78,7 +78,7 @@ export class ControllerScanner {
           method: requestMappingMetadata.method,
           returnType: ReflectTool.getMetadata(
             RETURN_TYPE_METADATA_KEY,
-            klass.prototype,
+            klass.type.prototype,
             key,
           ),
           params,
