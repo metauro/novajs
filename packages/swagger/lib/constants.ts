@@ -1,0 +1,16 @@
+export const SWAGGER_METADATA = {
+  API_BEARER_AUTH: Symbol('api-bearer-auth'),
+  API_CONSUMES: Symbol('api-consumes'),
+  API_IGNORE: Symbol('api-ignore'),
+  API_IMPLICIT_BODY: Symbol('api-implicit-body'),
+  API_IMPLICIT_FILE: Symbol('api-implicit-file'),
+  API_IMPLICIT_HEADER: Symbol('api-implicit-header'),
+  API_IMPLICIT_PARAM: Symbol('api-implicit-param'),
+  API_IMPLICIT_QUERY: Symbol('api-implicit-query'),
+  API_MODEL_PROPERTY: Symbol('api-model-property'),
+  API_OAUTH2: Symbol('api-oauth2'),
+  API_OPERATION: Symbol('api-operation'),
+  API_PRODUCES: Symbol('api-produces'),
+  API_RESPONSE: Symbol('api-response'),
+  API_USE_TAGS: Symbol('api-use-tags'),
+};

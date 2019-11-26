@@ -1,0 +1,18 @@
+{
+  "name": "@fastify-plus/swagger",
+  "version": "0.0.1",
+  "description": "modern fastify (@swagger)",
+  "author": "zhongyuanjia",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@fastify-plus/common": "0.0.1",
+    "@fastify-plus/core": "0.0.1",
+    "fastify-swagger": "^2.4.0"
+  }
+}
