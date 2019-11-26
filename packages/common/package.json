@@ -1,0 +1,22 @@
+{
+  "name": "@fastify-plus/common",
+  "version": "0.0.1",
+  "description": "modern fastify (@common)",
+  "author": "zhongyuanjia",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "is-class": "^0.0.9",
+    "reflect-metadata": "^0.1.13",
+    "utility-types": "^3.10.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.1"
+  }
+}

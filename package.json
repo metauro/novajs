@@ -1,20 +1,29 @@
 {
-  "name": "fastify-plus",
+  "name": "@fastify-plus/core",
   "version": "0.0.2",
+  "description": "modern fastify",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
+  "author": "zhongyuanjia",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/metauro/fastify-plus"
   },
+  "private": true,
+  "engines": {
+    "node": ">= 10.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "clean": "rimraf dist",
-    "lint": "eslint 'src/**/*.ts' --fix",
-    "format": "prettier src/**/*.ts --write",
-    "build:watch": "tsc -w -p tsconfig.json",
-    "build": "tsc -p tsconfig.json",
+    "clean": "rimraf packages/**/dist",
+    "lint": "eslint 'packages/**/*.ts' --fix",
+    "format": "prettier packages/**/*.ts --write",
+    "build": "tsc -b packages/*",
+    "build:watch": "tsc -b packages/* -w",
     "prepublishOnly": "yarn clean && yarn build"
   },
   "husky": {
@@ -35,43 +44,22 @@
       "@commitlint/config-conventional"
     ]
   },
-  "dependencies": {
-    "@nestjs/common": "^6.10.1",
-    "@nestjs/core": "^6.10.1",
-    "@nestjs/swagger": "^3.1.0",
-    "app-root-path": "^3.0.0",
-    "chalk": "^3.0.0",
-    "fastify": "^2.10.0",
-    "fs-extra": "^8.1.0",
-    "injection-js": "^2.2.2",
-    "is-class": "^0.0.9",
-    "lodash": "^4.17.15",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.3",
-    "source-map-support": "^0.5.16",
-    "tslib": "^1.10.0",
-    "utility-types": "^3.10.0"
-  },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
-    "@types/app-root-path": "^1.2.4",
-    "@types/chalk": "^2.2.0",
-    "@types/fs-extra": "^8.0.1",
-    "@types/lodash": "^4.14.147",
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
     "commitlint": "^8.2.0",
-    "concurrently": "^5.0.0",
+    "cz-lerna-changelog": "^2.0.2",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.7.0",
     "husky": "^3.1.0",
+    "lerna": "^3.19.0",
     "lint-staged": "^9.4.3",
-    "nodemon": "^1.19.4",
     "rimraf": "^3.0.0",
+    "source-map-support": "^0.5.16",
     "ts-node": "^8.5.2",
-    "typescript": "^3.7.2",
-    "wait-on": "^3.3.0"
+    "typescript": "^3.7.2"
   }
 }

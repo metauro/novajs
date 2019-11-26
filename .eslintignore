@@ -1,2 +1,4 @@
-src/http-request.ts
-src/http-response.ts
+**/*.test.ts
+node_modules
+packages/core/lib/http-request.ts
+packages/core/lib/http-response.ts
