@@ -22,6 +22,7 @@
     "clean": "rimraf packages/**/dist",
     "lint": "eslint 'packages/**/*.ts' --fix",
     "format": "prettier packages/**/*.ts --write",
+    "test": "jest packages/**/test/*.test.ts --preset=ts-jest",
     "build": "tsc -b packages/*",
     "build:watch": "tsc -b packages/* -w",
     "prepublishOnly": "yarn clean && yarn build"
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@types/jest": "^24.0.23",
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
@@ -55,10 +57,12 @@
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.7.0",
     "husky": "^3.1.0",
+    "jest": "^24.9.0",
     "lerna": "^3.19.0",
     "lint-staged": "^9.4.3",
     "rimraf": "^3.0.0",
     "source-map-support": "^0.5.16",
+    "ts-jest": "^24.2.0",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
   }
