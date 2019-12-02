@@ -1,0 +1,15 @@
+{
+  "name": "@fastify-plus/analyzer",
+  "version": "0.0.1",
+  "description": "modern fastify (@analyzer)",
+  "author": "zhongyuanjia",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
