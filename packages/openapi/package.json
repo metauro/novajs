@@ -1,0 +1,24 @@
+{
+  "name": "@fastify-plus/openapi",
+  "version": "0.0.1",
+  "description": "modern fastify (@openapi)",
+  "author": "zhongyuanjia",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@fastify-plus/common": "0.0.1",
+    "is-class": "^0.0.9",
+    "lodash": "^4.17.15",
+    "url-join": "^4.0.1",
+    "utility-types": "^3.10.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.149",
+    "@types/url-join": "^4.0.0"
+  }
+}
