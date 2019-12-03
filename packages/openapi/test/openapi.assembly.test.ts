@@ -1,14 +1,17 @@
 import {
+  ApiDelete,
   ApiGet,
+  ApiHead,
+  ApiOptions,
+  ApiPatch,
+  ApiPath,
   ApiPost,
   ApiPut,
-  ApiRequestBody,
-  ApiRequestParam,
   ApiSchema,
+  ApiTrace,
   OpenApiAssembly,
   Schema,
 } from '../lib';
-import { ApiPath } from '../lib/decorators/api-path.decorator';
 
 class Test {
   @ApiSchema()
@@ -47,36 +50,34 @@ describe('openapi assembly', () => {
   });
 
   it('should assemble correct operation', () => {
-    class UserSchema {
-      @ApiSchema()
-      id?: number;
-
-      @ApiSchema()
-      username: string;
-
-      @ApiSchema()
-      password: string;
-    }
-
     @ApiPath('tests')
     class TestController {
       @ApiPost()
-      createUser(
-        @ApiRequestBody({ description: 'will created user' })
-        userSchema: UserSchema,
-      ) {}
+      create() {}
 
-      @ApiGet(':id')
-      getUser(@ApiRequestParam('id') id: number) {}
+      @ApiGet()
+      getList() {}
 
-      @ApiPut(':id')
-      updateUser(
-        @ApiRequestParam() id: number,
-        @ApiRequestBody({ description: 'update user schema' })
-        userSchema: UserSchema,
-      ) {}
+      @ApiGet('{id}')
+      getOne() {}
+
+      @ApiPut('{id}')
+      update() {}
+
+      @ApiPatch('{id}')
+      partialUpdate() {}
+
+      @ApiDelete('{id}')
+      delete() {}
+
+      @ApiOptions()
+      options() {}
+
+      @ApiHead()
+      head() {}
+
+      @ApiTrace()
+      trace() {}
     }
-
-    console.log(OpenApiAssembly.assemblePathItem(TestController, 'createUser'));
   });
 });

@@ -90,7 +90,17 @@ export class OpenApiAssembly {
         type.prototype,
         key,
       ) || []
-    ).filter(v => !!v);
+    )
+      .filter(v => !!v)
+      .reduce((result, item) => {
+        if (Array.isArray(item)) {
+          result.push(...item);
+        } else {
+          result.push(item);
+        }
+
+        return result;
+      }, []);
   }
 
   static assembleRequestBody(
