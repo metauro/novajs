@@ -1,5 +1,4 @@
 export * from './api-ignore.decorator';
-export * from './api-oauth2.decorator';
 export * from './api-operation.decorator';
 export * from './api-request.decorator';
 export * from './api-response.decorator';
