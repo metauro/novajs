@@ -6,7 +6,6 @@ import { SecurityRequirement } from '../interfaces';
  * declare your api used security component
  // * use Bearer Token by default
  * @param metadata
- * @constructor
  */
 export function ApiSecurity(metadata: SecurityRequirement = { bearer: [] }) {
   return ReflectTool.createMixedDecorator(
