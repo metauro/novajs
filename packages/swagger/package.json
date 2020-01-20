@@ -18,5 +18,6 @@
   "dependencies": {
     "fastify-swagger": "^2.4.0",
     "is-class": "^0.0.9"
-  }
+  },
+  "gitHead": "9be435a0f594a958107453a699612aff06c6acb9"
 }

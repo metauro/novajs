@@ -20,5 +20,6 @@
     "is-class": "^0.0.9",
     "url-join": "^4.0.1",
     "utility-types": "^3.10.0"
-  }
+  },
+  "gitHead": "9be435a0f594a958107453a699612aff06c6acb9"
 }
