@@ -1,6 +1,6 @@
 {
   "name": "@fastify-plus/common",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "modern fastify (@common)",
   "author": "zhongyuanjia",
   "license": "MIT",
