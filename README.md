@@ -32,16 +32,15 @@ in controller, create your route handler
 ```typescript
 // home.controller.ts
 import { Controller } from '@fastify-plus/core';
-import { ApiGet, ApiRequestParam } from '@fastify-plus/openapi';
+import { ApiGet, ApiRequestParam, ApiOkResponse } from '@fastify-plus/openapi';
 import { HomeService } from '../service/home.service';
-import { HomeGetIndexResponse } from '../dto/home.dto';
 
 @Controller()
 export class HomeController {
   constructor(private readonly homeService: HomeService) {}
 
   @ApiGet(':id')
-  @ApiOkResponse({ type: HomeGetIndexResponse })
+  @ApiOkResponse({ type: Number, description: 'id' })
   async index(@ApiRequestParam() id: number) {
     return this.homeService.getIndex(id);
   }
@@ -54,14 +53,11 @@ general, we write our application logic on services
 
 ```typescript
 import { Service } from '@fastify-plus/core';
-import { HomeGetIndexResponse } from '../dto/home.dto';
 
 @Service()
 export class HomeService {
-  getIndex(id: number): HomeGetIndexResponse {
-    return {
-      name: `hello ${id}`,
-    };
+  getIndex(id: number) {
+    return id;
   }
 }
 ```
