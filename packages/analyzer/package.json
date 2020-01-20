@@ -1,6 +1,6 @@
 {
   "name": "@fastify-plus/analyzer",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "modern fastify (@analyzer)",
   "author": "zhongyuanjia",
   "license": "MIT",
@@ -9,7 +9,5 @@
   "types": "dist/index.d.ts",
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+  }
 }

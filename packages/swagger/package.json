@@ -1,6 +1,6 @@
 {
   "name": "@fastify-plus/swagger",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "modern fastify (@swagger)",
   "author": "zhongyuanjia",
   "license": "MIT",
@@ -18,6 +18,5 @@
   "dependencies": {
     "fastify-swagger": "^2.4.0",
     "is-class": "^0.0.9"
-  },
-  "devDependencies": {}
+  }
 }
