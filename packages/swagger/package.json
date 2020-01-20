@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fastify-plus/common": "0.0.1",
+    "@fastify-plus/core": "0.0.1",
     "@fastify-plus/openapi": "0.0.1",
     "fastify-swagger": "^2.4.0",
     "is-class": "^0.0.9"

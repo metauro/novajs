@@ -1,6 +1,4 @@
-import { DataTypeFormat } from './data-types.interface';
-
 export type Header = {
   description?: string;
-  schema: DataTypeFormat;
+  schema: { type?: string; format?: string };
 };

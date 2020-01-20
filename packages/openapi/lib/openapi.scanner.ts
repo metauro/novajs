@@ -17,7 +17,7 @@ export class OpenApiScanner {
       tags: this.scanTags(klasses),
       paths: this.scanPaths(klasses),
       components: {
-        schemas: this.scanSchemas(klasses),
+        schemas: {},
         securitySchemes: {
           bearer: {
             type: 'http',
@@ -89,7 +89,14 @@ export class OpenApiScanner {
           '/',
           pathItemMetadata ? pathItemMetadata.prefix : '',
           op.path,
-        );
+        )
+          /**
+           * fastify use :id, but openapi use {id}
+           * need transform it
+           */
+          .replace(/:(.*)\/?/, (_, match) => {
+            return `{${match}}`;
+          });
 
         if (!result[path]) {
           result[path] = {};

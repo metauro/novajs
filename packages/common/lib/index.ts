@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 export * from './enum';
 export * from './errors';
+export * from './exceptions';
 export * from './interfaces';
 export * from './scanners';
 export * from './services';

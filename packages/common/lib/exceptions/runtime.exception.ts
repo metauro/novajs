@@ -3,7 +3,7 @@
  * it will be catch by framework
  */
 export class RuntimeException extends Error {
-  constructor(message: string) {
+  constructor(message?: string) {
     super(message);
   }
 }

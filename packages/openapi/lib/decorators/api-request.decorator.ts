@@ -1,14 +1,11 @@
-import {
-  COMMON_METADATA,
-  ReflectTool,
-  UnknownTypeError,
-} from '@fastify-plus/common';
+import { COMMON_METADATA, ReflectTool } from '@fastify-plus/common';
 import { merge, omit } from 'lodash';
 import {
   CookieParameterStyle,
   HeaderParameterStyle,
   MediaType,
   Parameter,
+  ParameterMetadata,
   PathParameterStyle,
   QueryParameterStyle,
   RequestBody,
@@ -70,7 +67,7 @@ function createApiRequestParameter<T>(
       );
     };
 
-    return ReflectTool.createParamDecorator<Parameter>(
+    return ReflectTool.createParamDecorator<ParameterMetadata>(
       OPENAPI_METADATA.API_REQUEST_PARAMETER,
       (target, key, paramIndex) => {
         const type = ReflectTool.getOwnMetadata(
@@ -79,17 +76,18 @@ function createApiRequestParameter<T>(
           key,
         )[paramIndex];
 
-        // maximum stack size
-        if (isClass(type)) {
-          return handleClass(type);
-        }
-
         return merge(
           {
             name: FunctionAnalyzer.getParamNames(target[key])[paramIndex],
             required: true,
             in: place,
-            schema: TypeTool.getSchema(type),
+            ...(isClass(type)
+              ? {
+                  schemas: handleClass(type),
+                }
+              : {
+                  schema: TypeTool.getSchema(type),
+                }),
           },
           metadata,
         ) as any;
@@ -137,10 +135,6 @@ export function ApiRequestBody(
         target,
         key,
       )[paramIndex];
-
-      if (!type) {
-        throw new UnknownTypeError(target, key, paramIndex);
-      }
 
       const contentType =
         metadata.contentType || isClass(type)

@@ -1,12 +1,12 @@
 import { CORE_METADATA } from '../constants';
-import { KlassScanner, ReflectTool } from '@fastify-plus/common';
+import { Klass, ReflectTool } from '@fastify-plus/common';
 
 export class ServiceScanner {
-  static async scan(dir: string) {
-    return (await KlassScanner.scan(dir)).filter(
+  static scan(klasses: Klass[]) {
+    return klasses.filter(
       k =>
         k.infix === 'service' ||
-        !!ReflectTool.getMetadata(CORE_METADATA.SERVICE, k.type),
+        !!ReflectTool.getOwnMetadata(CORE_METADATA.SERVICE, k.type),
     );
   }
 }

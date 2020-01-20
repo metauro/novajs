@@ -1,8 +1,7 @@
 import fastify from 'fastify';
 import { ReflectiveInjector } from 'injection-js';
-import { KlassScanner } from '@fastify-plus/common';
+import { KlassScanner, internalLoggerService } from '@fastify-plus/common';
 import { ApplicationContext, ApplicationOptions } from './interfaces';
-import { internalLoggerService } from './services';
 import { ControllerHandler } from './controller-handler';
 
 export class FastifyPlusApplication {
@@ -37,12 +36,19 @@ export class FastifyPlusApplication {
 
   listen(port: number, address?: string) {
     const { http } = this.ctx;
-    http.listen(port, address || 'localhost', (err, address) => {
-      if (err) {
-        throw err;
-      }
+    process.on('SIGINT', async () => {
+      await http.close();
+      process.exit();
+    });
+    return new Promise((resolve, reject) => {
+      http.listen(port, address || 'localhost', (err, address) => {
+        if (err) {
+          reject(err);
+        }
 
-      internalLoggerService.info(`The server has listen on ${address}`);
+        internalLoggerService.info(`The server has listen on ${address}`);
+        resolve();
+      });
     });
   }
 }

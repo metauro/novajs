@@ -93,8 +93,8 @@ export class OpenApiAssembly {
     )
       .filter(v => !!v)
       .reduce((result, item) => {
-        if (Array.isArray(item)) {
-          result.push(...item);
+        if (item.schemas) {
+          result.push(...item.schemas);
         } else {
           result.push(item);
         }

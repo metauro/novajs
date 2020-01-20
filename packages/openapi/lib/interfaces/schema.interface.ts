@@ -1,4 +1,3 @@
-import { DataTypeFormat } from './data-types.interface';
 import { Discriminator } from './discriminator.interface';
 import { XML } from './xml.interface';
 import { ExternalDocument } from './external-document.interface';
@@ -8,6 +7,31 @@ import { Reference } from './reference.interface';
  * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#schemaObject}
  */
 export type Schema = {
+  type?: 'integer' | 'number' | 'string' | 'boolean' | 'object' | 'array';
+  format?:
+    | 'int32'
+    | 'int64'
+    | 'float'
+    | 'double'
+    | 'byte'
+    | 'binary'
+    | 'date'
+    | 'date-time'
+    | 'password'
+    // extend format for ajv
+    | 'time'
+    | 'uri'
+    | 'uri-reference'
+    | 'uri-template'
+    | 'email'
+    | 'hostname'
+    | 'ipv4'
+    | 'ipv6'
+    | 'regex'
+    | 'uuid'
+    | 'json-pointer'
+    | 'relative-json-pointer'
+    | string;
   title?: string;
   multipleOf?: number;
   maximum?: number;
@@ -41,7 +65,7 @@ export type Schema = {
   externalDocs?: ExternalDocument;
   example?: any;
   deprecated?: boolean;
-} & DataTypeFormat;
+};
 
 export type SchemaMetadata = Omit<
   Schema,

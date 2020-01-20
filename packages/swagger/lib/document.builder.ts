@@ -7,6 +7,7 @@ import {
   OpenApiScanner,
   Responses,
 } from '@fastify-plus/openapi';
+import { internalLoggerService, ObjectTool } from '@fastify-plus/common';
 
 export class DocumentBuilder {
   static create(app: FastifyPlusApplication) {
@@ -27,7 +28,7 @@ export class DocumentBuilder {
     paths: {},
     host: '',
     basePath: '',
-    schemes: ['http'],
+    schemes: ['http', 'https'],
   };
 
   protected hasGlobalResponses = false;
@@ -35,6 +36,30 @@ export class DocumentBuilder {
   constructor(protected readonly app: FastifyPlusApplication) {
     const { klasses } = app.getContext();
     merge(this.document, OpenApiScanner.scan(klasses));
+    this.resetNonsupportFormat();
+  }
+
+  private resetNonsupportFormat() {
+    const nonsupportFormats = [
+      'time',
+      'uri',
+      'uri-reference',
+      'uri-template',
+      'email',
+      'hostname',
+      'ipv4',
+      'ipv6',
+      'regex',
+      'uuid',
+      'json-pointer',
+      'relative-json-pointer',
+    ];
+
+    ObjectTool.walk(this.document, (key, val, obj) => {
+      if (key === 'format' && nonsupportFormats.includes(val)) {
+        delete obj[key];
+      }
+    });
   }
 
   setInfo(info: Info) {
@@ -80,15 +105,8 @@ export class DocumentBuilder {
         },
       });
     }
-    console.log(
-      JSON.stringify(
-        {
-          ...this.document,
-        },
-        null,
-        2,
-      ),
-    );
+
+    internalLoggerService.info('map swagger to /api-doc');
     this.app.getFastifyInstance().register(fastifySwagger, {
       mode: 'static',
       specification: {

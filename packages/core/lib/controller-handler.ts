@@ -1,29 +1,44 @@
+import urljoin from 'url-join';
 import { ControllerScanner } from './scanners';
-import { internalLoggerService } from './services';
+import { COMMON_METADATA, internalLoggerService } from '@fastify-plus/common';
+import { HTTPMethod } from 'fastify';
 import { ApplicationContext, ControllerRoute } from './interfaces';
+import { ControllerExplorer } from './explorers';
 
 export class ControllerHandler {
   constructor(protected readonly ctx: ApplicationContext) {}
 
   public async registerControllers() {
-    const { appRootPath, injector, http } = this.ctx;
-
-    for (const controller of await ControllerScanner.scan(appRootPath)) {
-      internalLoggerService.info(
-        `found controller: ${controller.klass.type.name}`,
-      );
-      for (const route of controller.routes) {
-        internalLoggerService.info(
-          `found route: [${route.handler.name}], path: [${route.path}], method: [${route.method}]`,
-        );
-        const instance = injector.get(controller.klass.type);
+    const { injector, http, klasses } = this.ctx;
+    internalLoggerService.info('scan controllers');
+    for (const controller of await ControllerScanner.scan(klasses)) {
+      internalLoggerService.info(`found controller: ${controller.type.name}`);
+      const path = ControllerExplorer.explorePath(controller);
+      for (const route of ControllerExplorer.exploreRoutes(controller)) {
+        const instance = injector.get(controller.type);
         const handler = this.getRouteHandler(route);
+        const url = urljoin('/', path.prefix, route.path);
+        const method = route.method.toUpperCase() as HTTPMethod;
+        const schema = ControllerExplorer.exploreRouteSchema(route);
+        internalLoggerService.info(
+          `found controller: ${controller.type.name}, route: ${route.handler.name}, path: ${url} method: ${method}`,
+        );
+        internalLoggerService.debug(
+          `use schema: ${JSON.stringify(schema, null, 2)}`,
+        );
 
         http.route({
-          url: route.path,
-          method: route.method,
+          url,
+          method,
+          schema,
           handler: (request, response) => {
-            handler(request, response, instance, route.handler);
+            handler(request, response, instance, route.handler)
+              .then(res => {
+                !response.sent && response.send(res);
+              })
+              .catch(err => {
+                response.send(err);
+              });
           },
         });
       }
@@ -31,35 +46,33 @@ export class ControllerHandler {
   }
 
   protected getRouteHandler(route: ControllerRoute): Function {
-    return route.returnType === Promise
-      ? new Function(
-          'request, response, instance, handler',
-          `
-  handler.apply(instance, [${route.params.map(p => p.useParamKey).join(',')}])
-    .then(result => {
-      if (!response.sent) {
-        response.send(result);
-      }
-    })
-    .catch(err => {
-      response.send(err);
-    });
-`,
-        )
-      : new Function(
-          'request, response, instance, handler',
-          `      
+    const retType = Reflect.getMetadata(
+      COMMON_METADATA.RETURN_TYPE,
+      route.controller.type.prototype,
+      route.handler.name,
+    );
+    const paramsCode = ControllerExplorer.exploreRouteParams(route).join(',');
+
+    if (retType === Promise) {
+      return new Function(
+        'request, response, instance, handler',
+        `
+return handler.apply(instance, [${paramsCode}]);               
+      `,
+      );
+    }
+
+    return new Function(
+      'request, response, instance, handler',
+      `
+return new Promise((resolve, reject) => {
   try {
-    const result = handler.apply(instance, [${route.params
-      .map(p => p.useParamKey)
-      .join(',')}]);
-    if (!response.sent) {
-      response.send(result);
-    } 
-  } catch(e) {
-    response.send(e);
+    resolve(handler.apply(instance, [${paramsCode}]));   
+  } catch(err) {
+    reject(err);
   }
+})   
 `,
-        );
+    );
   }
 }

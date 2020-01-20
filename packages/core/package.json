@@ -12,7 +12,11 @@
   },
   "dependencies": {
     "@fastify-plus/common": "0.0.1",
+    "@fastify-plus/openapi": "0.0.1",
     "fastify": "^2.10.0",
-    "injection-js": "^2.2.2"
+    "injection-js": "^2.2.2",
+    "is-class": "^0.0.9",
+    "url-join": "^4.0.1",
+    "utility-types": "^3.10.0"
   }
 }

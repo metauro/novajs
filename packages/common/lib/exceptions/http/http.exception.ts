@@ -2,7 +2,30 @@ import { RuntimeException } from '../runtime.exception';
 import { HttpStatus } from '../../enum';
 
 export class HttpException extends RuntimeException {
-  constructor(statusCode: HttpStatus, reason: string) {
-    super(`[Http Exception]: ${statusCode} ${reason}`);
+  readonly message: any;
+
+  constructor(response: object) {
+    super();
+    this.message = response;
+  }
+
+  static createBody(
+    statusCode: HttpStatus | number,
+    error: string,
+    message?: any,
+  ) {
+    if (typeof message === 'string') {
+      return {
+        statusCode,
+        error,
+        message,
+      };
+    }
+
+    return message;
+  }
+
+  toString() {
+    return JSON.stringify(this.message);
   }
 }

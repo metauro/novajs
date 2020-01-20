@@ -1,14 +1,14 @@
 import {
+  ApiOkResponse,
+  ApiPath,
   ApiPost,
   ApiRequestBody,
-  OpenApiScanner,
-  ApiSchema,
   ApiRequestCookie,
-  ApiOkResponse,
+  ApiSchema,
+  OpenApiScanner,
+  Schema,
 } from '../lib';
 import { Klass, KlassScanner } from '@fastify-plus/common';
-import { Schema } from '../lib/interfaces';
-import { ApiPath } from '../lib/decorators/api-path.decorator';
 
 export class UserSchema {
   @ApiSchema({ required: false })

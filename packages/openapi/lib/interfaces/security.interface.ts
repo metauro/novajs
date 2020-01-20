@@ -39,7 +39,8 @@ export type SecuritySchema = (
   | {
       type: 'openIdConnect';
       openIdConnectUrl: string;
-    }) & {
+    }
+) & {
   description?: string;
 };
 

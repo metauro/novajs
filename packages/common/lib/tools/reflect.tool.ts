@@ -94,7 +94,7 @@ export class ReflectTool {
       this.recordProperty(target, key);
       const m = this.getOwnMetadata(metadataKey, target, key) || [];
       m[paramIndex] = this.transformMetadata(metadata, target, key, paramIndex);
-      this.defineMetadata(metadataKey, m, target, key);
+      Reflect.defineMetadata(metadataKey, m, target, key);
     };
   }
 

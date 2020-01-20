@@ -47,4 +47,9 @@ export type Parameter = {
   | {
       in: 'cookie';
       style?: CookieParameterStyle;
-    });
+    }
+);
+
+export type ParameterMetadata = Parameter & {
+  schemas?: Array<Schema | Reference>;
+};

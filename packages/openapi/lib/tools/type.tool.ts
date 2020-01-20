@@ -1,9 +1,10 @@
 import isClass from 'is-class';
-import { DataTypeFormat } from '../interfaces/data-types.interface';
 import { Reference, Schema } from '../interfaces';
+import { COMMON_METADATA, ReflectTool } from '@fastify-plus/common';
+import { OpenApiExplorer } from '../openapi.explorer';
 
 export class TypeTool {
-  private static typeMap = new Map<Function, DataTypeFormat>([
+  private static typeMap = new Map<Function, Schema>([
     [String, { type: 'string' }],
     [Number, { type: 'number' }],
     [Boolean, { type: 'boolean' }],
@@ -11,11 +12,25 @@ export class TypeTool {
   ]);
 
   static getSchema(type: Function, isArray = false): Schema | Reference {
-    const schema = isClass(type)
-      ? {
-          $ref: `#/components/schemas/${type.name}`,
+    let schema: Schema;
+
+    if (isClass(type)) {
+      schema = { type: 'object', required: [], properties: {} };
+      for (const k of ReflectTool.getOwnDecoratedProperties(type.prototype)) {
+        const addition = OpenApiExplorer.exploreSchema(type.prototype, k);
+        if (addition.required) {
+          schema.required.push(k);
         }
-      : this.typeMap.get(type);
+        schema.properties[k] = {
+          ...this.getSchema(
+            Reflect.getMetadata(COMMON_METADATA.TYPE, type.prototype, k),
+          ),
+          ...addition,
+        } as any;
+      }
+    } else {
+      schema = this.typeMap.get(type);
+    }
 
     if (isArray) {
       return {
