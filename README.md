@@ -3,13 +3,13 @@
 npm
 
 ```
-npm i @fastify-plus/common @fastify-plus/core @fastify-plus/openapi
+npm i @fastify-plus/common @fastify-plus/analyzer @fastify-plus/core @fastify-plus/openapi
 ```
 
 yarn
 
 ```
-yarn add @fastify-plus/common @fastify-plus/core @fastify-plus/openapi
+yarn add @fastify-plus/common @fastify-plus/analyzer @fastify-plus/core @fastify-plus/openapi
 ```
 
 ### Project Structure
