@@ -66,11 +66,14 @@ export class HomeService {
 
 ```typescript
 import { FastifyPlusApplication } from '@fastify-plus/core';
+import { DocumentBuild } from '@fastify/swagger';
 
 async function bootstrap() {
   const app = await FastifyPlusApplication.create({
     appRootPath: __dirname,
   });
+  // add swagger docs
+  DocumentBuild.create(app).build();
   await app.start(3000);
 }
 
