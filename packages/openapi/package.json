@@ -11,7 +11,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@fastify-plus/common": "0.0.1"
+    "@fastify-plus/common": "0.0.1",
+    "@fastify-plus/analyzer": "0.0.1"
   },
   "dependencies": {
     "is-class": "^0.0.9",
