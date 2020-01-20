@@ -3,13 +3,13 @@
 npm
 
 ```
-npm i fastify-plus
+npm i @fastify-plus/common @fastify-plus/core @fastify-plus/openapi
 ```
 
 yarn
 
 ```
-yarn add fastify-plus
+yarn add @fastify-plus/common @fastify-plus/core @fastify-plus/openapi
 ```
 
 ### Project Structure
@@ -31,18 +31,19 @@ in controller, create your route handler
 
 ```typescript
 // home.controller.ts
-import { Controller, Get, RequestQuery } from 'fastify-plus';
-import { HomeGetIndexRequest, HomeGetIndexResponse } from '../dto/home.dto';
+import { Controller } from '@fastify-plus/core';
+import { ApiGet, ApiRequestParam } from '@fastify-plus/openapi';
+import { HomeService } from '../service/home.service';
+import { HomeGetIndexResponse } from '../dto/home.dto';
 
 @Controller()
 export class HomeController {
   constructor(private readonly homeService: HomeService) {}
 
-  @Get()
-  index(
-    @RequestQuery() homeGetIndexRequest: HomeGetIndexRequest,
-  ): HomeGetIndexResponse {
-    return this.homeService.getIndex(homeGetIndexRequest);
+  @ApiGet(':id')
+  @ApiOkResponse({ type: HomeGetIndexResponse })
+  async index(@ApiRequestParam() id: number) {
+    return this.homeService.getIndex(id);
   }
 }
 ```
@@ -52,14 +53,14 @@ export class HomeController {
 general, we write our application logic on services
 
 ```typescript
-import { Service } from 'fastify-plus';
-import { HomeGetIndexRequest, HomeGetIndexResponse } from '../dto/home.dto';
+import { Service } from '@fastify-plus/core';
+import { HomeGetIndexResponse } from '../dto/home.dto';
 
 @Service()
 export class HomeService {
-  getIndex(homeGetIndexRequest: HomeGetIndexRequest): HomeGetIndexResponse {
+  getIndex(id: number): HomeGetIndexResponse {
     return {
-      name: homeGetIndexRequest.id,
+      name: `hello ${id}`,
     };
   }
 }
@@ -68,10 +69,10 @@ export class HomeService {
 ### App
 
 ```typescript
-import { FastifyPlusApplication } from 'fastify-plus';
+import { FastifyPlusApplication } from '@fastify-plus/core';
 
 async function bootstrap() {
-  const app = new FastifyPlusApplication({
+  const app = await FastifyPlusApplication.create({
     appRootPath: __dirname,
   });
   await app.start(3000);
@@ -80,10 +81,14 @@ async function bootstrap() {
 bootstrap();
 ```
 
-now, you can access your api in http://127.0.0.1:3000/?id=2
+now, you can access your api in http://127.0.0.1:3000/1
 
 ### todos
 
-- [ ] support swagger document
+- [x] support swagger document
 - [ ] support property inject
-- [ ] get controller route param and generate schema
+- [x] get controller route param and generate schema
+- [ ] add unit test
+- [ ] support generate schema when has generic type
+- [ ] auto fill required property for schema
+- [ ] exception layer
