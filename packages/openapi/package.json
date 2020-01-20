@@ -10,8 +10,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "peerDependencies": {
+    "@fastify-plus/common": "0.0.1"
+  },
   "dependencies": {
-    "@fastify-plus/common": "0.0.1",
     "is-class": "^0.0.9",
     "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",

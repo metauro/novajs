@@ -10,9 +10,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@fastify-plus/common": "0.0.1",
-    "@fastify-plus/openapi": "0.0.1",
+    "@fastify-plus/openapi": "0.0.1"
+  },
+  "dependencies": {
     "fastify": "^2.10.0",
     "injection-js": "^2.2.2",
     "is-class": "^0.0.9",
