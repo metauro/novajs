@@ -4,7 +4,7 @@ import { Link } from './link.interface';
 import { Reference } from './reference.interface';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#responseObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#responseObject}
  */
 export type Response = {
   description: string;
@@ -14,7 +14,7 @@ export type Response = {
 };
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#responsesObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#responsesObject}
  */
 export type Responses = {
   default?: Response | Reference;

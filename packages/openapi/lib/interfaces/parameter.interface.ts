@@ -16,7 +16,7 @@ export type PathParameterStyle = 'matrix' | 'label' | 'simple';
 export type CookieParameterStyle = 'form';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#parameterObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#parameterObject}
  */
 export type Parameter = {
   name: string;

@@ -4,7 +4,7 @@ import { Server } from './server.interface';
 import { Parameter } from './parameter.interface';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#pathItemObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#pathItemObject}
  */
 export type PathItem = {
   $ref?: string;
@@ -21,6 +21,6 @@ export type PathItemMetadata = {
 } & PathItem;
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#pathsObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#pathsObject}
  */
 export type Paths = Record<string, PathItem>;

@@ -4,7 +4,7 @@ import { ExternalDocument } from './external-document.interface';
 import { Reference } from './reference.interface';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#schemaObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#schemaObject}
  */
 export type Schema = {
   type?: 'integer' | 'number' | 'string' | 'boolean' | 'object' | 'array';

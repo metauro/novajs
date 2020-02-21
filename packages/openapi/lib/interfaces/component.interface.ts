@@ -8,7 +8,7 @@ import { SecuritySchema } from './security.interface';
 import { Callback } from './callback.interface';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#componentsObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#componentsObject}
  */
 export type Components = {
   schemas?: Record<string, Schema | Reference>;

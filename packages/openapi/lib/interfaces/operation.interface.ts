@@ -8,7 +8,7 @@ import { Responses } from './response.interface';
 import { SecurityRequirement } from './security.interface';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#operationObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#operationObject}
  */
 export type Operation = {
   tags?: string[];

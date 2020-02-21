@@ -4,7 +4,7 @@ import { Encoding } from './encoding.interface';
 import { Schema } from './schema.interface';
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#mediaTypeObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#mediaTypeObject}
  */
 export type MediaType = {
   schema?: Schema | Reference;

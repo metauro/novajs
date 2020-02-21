@@ -1,5 +1,5 @@
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#oauthFlowObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#oauthFlowObject}
  */
 export type OAuthFlow = {
   authorizationUrl: string;
@@ -9,7 +9,7 @@ export type OAuthFlow = {
 };
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#oauthFlowsObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#oauthFlowsObject}
  */
 export type OAuthFlows = {
   implicit?: Omit<OAuthFlow, 'tokenUrl'>;
@@ -19,7 +19,7 @@ export type OAuthFlows = {
 };
 
 /**
- * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#securitySchemeObject}
+ * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#securitySchemeObject}
  */
 export type SecuritySchema = (
   | {
@@ -28,7 +28,7 @@ export type SecuritySchema = (
       in: 'query' | 'header' | 'cookie';
     }
   | {
-      type: 'http';
+      type: 'server';
       scheme: string;
       bearerFormat?: string;
     }
