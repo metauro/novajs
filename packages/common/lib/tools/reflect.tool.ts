@@ -143,12 +143,18 @@ export class ReflectTool {
     );
   }
 
+  /**
+   * record decorated properties
+   * @param target
+   * @param key
+   */
   private static recordProperty(target: Object, key: string | symbol) {
     const properties =
       this.getOwnMetadata(COMMON_METADATA.PROPERTIES, target) || [];
     properties.push(key);
     this.defineMetadata(
       COMMON_METADATA.PROPERTIES,
+      // remove duplicate
       [...new Set(properties)],
       target,
     );

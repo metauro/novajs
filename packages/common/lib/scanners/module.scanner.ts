@@ -1,17 +1,15 @@
 import { ResourceScanner } from './resource.scanner';
 import { Module } from '../interfaces';
+import { EnvTool } from '../tools';
 
 export class ModuleScanner {
-  public static async scan(dir: string): Promise<Module[]> {
+  static async scan(dir: string): Promise<Module[]> {
     const resources = await ResourceScanner.scan(dir);
-    const fileType =
-      process.env._.includes('ts-node') || process.env.JEST_WORKER_ID
-        ? 'ts'
-        : 'js';
+    const ext = EnvTool.inTsEnv() ? '.ts' : '.js';
 
     return Promise.all(
       resources
-        .filter(resource => resource.suffix === fileType)
+        .filter(resource => resource.ext === ext)
         .map(async resource => ({
           ...resource,
           exports: await import(resource.path),

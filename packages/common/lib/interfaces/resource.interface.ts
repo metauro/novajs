@@ -1,17 +1,10 @@
 import { ParsedPath } from 'path';
 
 export type Resource = {
+  /**
+   * file absolute path
+   */
   path: string;
-  /**
-   * eg:
-   *   test.service.ts infix is service
-   *   setup-test.ts infix is empty string
-   */
-  infix?: string;
-  /**
-   * alias ext, but exclude dot
-   */
-  suffix: string;
   /**
    * file content, read as utf8
    */
