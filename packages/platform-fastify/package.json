@@ -1,6 +1,6 @@
 {
   "name": "@sojs/platform-fastify",
-  "version": "0.3.0",
+  "version": "0.3.1-alpha.0",
   "description": "modern fastify (@platform-fastify)",
   "author": "zhongyuanjia",
   "license": "MIT",
