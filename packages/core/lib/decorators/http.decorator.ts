@@ -1,4 +1,4 @@
-import { ReflectTool } from '@novajs/common';
+import { ReflectTool } from '@sojs/common';
 import { CORE_METADATA } from '../constants';
 
 export function Req() {

@@ -1,9 +1,4 @@
-import {
-  COMMON_METADATA,
-  HttpStatus,
-  Klass,
-  ReflectTool,
-} from '@novajs/common';
+import { COMMON_METADATA, HttpStatus, Klass, ReflectTool } from '@sojs/common';
 import {
   OPENAPI_METADATA,
   OpenApiExplorer,
@@ -11,7 +6,7 @@ import {
   Parameter,
   ParameterMetadata,
   RequestBody,
-} from '@novajs/openapi';
+} from '@sojs/openapi';
 import {
   ApplicationContext,
   ControllerRoute,

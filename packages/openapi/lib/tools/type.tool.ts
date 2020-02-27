@@ -1,7 +1,7 @@
 import isClass from 'is-class';
 import { omit } from 'lodash';
 import { Schema } from '../interfaces';
-import { COMMON_METADATA, ReflectTool } from '@novajs/common';
+import { COMMON_METADATA, ReflectTool } from '@sojs/common';
 import { OpenApiExplorer } from '../openapi.explorer';
 
 export class TypeTool {

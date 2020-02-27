@@ -1,4 +1,4 @@
-import { COMMON_METADATA, ReflectTool } from '@novajs/common';
+import { COMMON_METADATA, ReflectTool } from '@sojs/common';
 import { merge, omit } from 'lodash';
 import {
   CookieParameterStyle,
@@ -13,7 +13,7 @@ import {
 } from '../interfaces';
 import { OPENAPI_METADATA } from '../constants';
 import isClass from 'is-class';
-import { FunctionAnalyzer } from '@novajs/analyzer';
+import { FunctionAnalyzer } from '@sojs/analyzer';
 import { TypeTool } from '../tools';
 import { Class } from 'utility-types';
 

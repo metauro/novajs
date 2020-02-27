@@ -1,15 +1,13 @@
-import { isArray, mergeWith, union } from 'lodash';
-import { ClassTool, Klass, ReflectTool } from '@novajs/common';
+import { isArray, mergeWith } from 'lodash';
+import { Klass, ReflectTool } from '@sojs/common';
 import {
   OpenApi,
   Operation,
   OperationMetadata,
   PathItem,
-  Schema,
   Tag,
 } from './interfaces';
 import { OPENAPI_METADATA } from './constants';
-import { OpenApiAssembly } from './openapi.assembly';
 import { OpenApiExplorer } from './openapi.explorer';
 
 export class OpenApiScanner {
@@ -45,35 +43,6 @@ export class OpenApiScanner {
       result.push(...OpenApiExplorer.exploreTags(k.type));
       return result;
     }, []);
-  }
-
-  static scanSchemas(klasses: Klass[]): Record<string, Schema> {
-    const result: Record<string, Schema> = {};
-
-    for (const { type } of klasses) {
-      const schema = {};
-
-      // children should override parent
-      for (const target of [type, ...ClassTool.getPrototypes(type)].reverse()) {
-        mergeWith(
-          schema,
-          OpenApiAssembly.assembleSchema(target),
-          (objValue, srcValue) => {
-            if (isArray(objValue)) {
-              return union(objValue.concat(srcValue));
-            }
-          },
-        );
-      }
-
-      if (Object.keys(schema).length === 0) {
-        continue;
-      }
-
-      result[type.name] = schema;
-    }
-
-    return result;
   }
 
   static scanPaths(klasses: Klass[]): Record<string, PathItem> {

@@ -8,7 +8,7 @@ import {
   OpenApiScanner,
   Schema,
 } from '../lib';
-import { Klass, KlassScanner } from '@novajs/common';
+import { Klass, KlassScanner } from '@sojs/common';
 
 export class UserSchema {
   @ApiSchema({ required: false })

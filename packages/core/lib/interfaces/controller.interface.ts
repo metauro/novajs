@@ -1,5 +1,5 @@
-import { OperationMetadata } from '@novajs/openapi';
-import { Klass } from '@novajs/common';
+import { OperationMetadata } from '@sojs/openapi';
+import { Klass } from '@sojs/common';
 import { JSONSchema6 } from 'json-schema';
 
 export type ControllerRoute = {

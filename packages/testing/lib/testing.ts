@@ -1,7 +1,7 @@
-import { ControllerExplorer } from '@novajs/core/dist/explorers';
+import { ControllerExplorer } from '@sojs/core/dist/explorers';
 import { Class } from 'utility-types';
 import supertest from 'supertest';
-import { Application } from '@novajs/core';
+import { Application } from '@sojs/core';
 
 export class Testing {
   constructor(

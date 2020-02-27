@@ -1,5 +1,5 @@
 import { OPENAPI_METADATA } from '../constants';
-import { COMMON_METADATA, HttpStatus, ReflectTool } from '@novajs/common';
+import { COMMON_METADATA, HttpStatus, ReflectTool } from '@sojs/common';
 import { pick } from 'lodash';
 import { Encoding, Header, Responses } from '../interfaces';
 import isClass from 'is-class';

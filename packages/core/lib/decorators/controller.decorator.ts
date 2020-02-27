@@ -1,5 +1,5 @@
-import { ReflectTool } from '@novajs/common';
-import { ApiPath, PathItemMetadata } from '@novajs/openapi';
+import { ReflectTool } from '@sojs/common';
+import { ApiPath, PathItemMetadata } from '@sojs/openapi';
 import { CORE_METADATA } from '../constants';
 
 export function Controller(): ClassDecorator;

@@ -1,5 +1,5 @@
-import { RuntimeError } from '@novajs/common';
-import { HttpAdapter } from '@novajs/core';
+import { RuntimeError } from '@sojs/common';
+import { HttpAdapter } from '@sojs/core';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ServerResponse } from 'http';
 

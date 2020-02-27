@@ -1,4 +1,4 @@
-import { ReflectTool } from '@novajs/common';
+import { ReflectTool } from '@sojs/common';
 import { OPENAPI_METADATA } from '../constants';
 import { SecurityRequirement } from '../interfaces';
 

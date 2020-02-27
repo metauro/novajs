@@ -1,5 +1,5 @@
 {
-  "name": "@novajs/core",
+  "name": "@sojs/core",
   "version": "0.0.2",
   "description": "modern fastify",
   "main": "dist/index.js",

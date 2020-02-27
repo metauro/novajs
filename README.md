@@ -3,13 +3,13 @@
 npm
 
 ```
-npm i @novajs/common @novajs/analyzer @novajs/core @novajs/openapi
+npm i @sojs/common @sojs/analyzer @sojs/core @sojs/openapi
 ```
 
 yarn
 
 ```
-yarn add @novajs/common @novajs/analyzer @novajs/core @novajs/openapi
+yarn add @sojs/common @sojs/analyzer @sojs/core @sojs/openapi
 ```
 
 ### Project Structure
@@ -31,8 +31,8 @@ in controller, create your route handler
 
 ```typescript
 // home.controller.ts
-import { Controller } from '@novajs/core';
-import { ApiGet, ApiRequestParam, ApiOkResponse } from '@novajs/openapi';
+import { Controller } from '@sojs/core';
+import { ApiGet, ApiRequestParam, ApiOkResponse } from '@sojs/openapi';
 import { HomeService } from '../service/home.service';
 
 @Controller()
@@ -52,7 +52,7 @@ export class HomeController {
 general, we write our application logic on services
 
 ```typescript
-import { Service } from '@novajs/core';
+import { Service } from '@sojs/core';
 
 @Service()
 export class HomeService {
@@ -65,7 +65,7 @@ export class HomeService {
 ### App
 
 ```typescript
-import { FastifyPlusApplication } from '@novajs/core';
+import { FastifyPlusApplication } from '@sojs/core';
 import { DocumentBuild } from '@fastify/swagger';
 
 async function bootstrap() {

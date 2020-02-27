@@ -1,5 +1,5 @@
 import { OPENAPI_METADATA } from '../constants';
-import { ReflectTool } from '@novajs/common';
+import { ReflectTool } from '@sojs/common';
 
 export function ApiIgnore() {
   return ReflectTool.createMixedDecorator(OPENAPI_METADATA.API_IGNORE, {

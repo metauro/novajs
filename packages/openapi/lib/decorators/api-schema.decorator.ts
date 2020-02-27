@@ -1,6 +1,6 @@
 import { merge } from 'lodash';
 import { OPENAPI_METADATA } from '../constants';
-import { ReflectTool } from '@novajs/common';
+import { ReflectTool } from '@sojs/common';
 import { SchemaMetadata } from '../interfaces';
 
 export function ApiSchema(metadata?: SchemaMetadata) {

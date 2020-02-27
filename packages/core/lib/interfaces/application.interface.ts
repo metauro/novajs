@@ -1,7 +1,7 @@
 import { ReflectiveInjector } from 'injection-js';
-import { Klass, LogLevel } from '@novajs/common';
+import { Klass, LogLevel } from '@sojs/common';
 import { ApplicationAdapter } from '../adapter';
-import { OpenApi } from '@novajs/openapi';
+import { OpenApi } from '@sojs/openapi';
 
 export type ApplicationOptions = {
   appRootPath: string;

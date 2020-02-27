@@ -1,4 +1,4 @@
-### @novajs/openapi
+### @sojs/openapi
 
 OpenAPI v3.0 Specification Implementation
 
@@ -15,7 +15,7 @@ import {
   ApiOkResponse,
   ApiRequestBody,
   ApiRequestQuery,
-} from '@novajs/openapi';
+} from '@sojs/openapi';
 import { UserSchema } from '../schema/user.schame';
 
 // optional tag, default is class name
@@ -40,7 +40,7 @@ export class UserController {
 #### Define Schema
 
 ```typescript
-import { ApiSchema } from '@novajs/openapi';
+import { ApiSchema } from '@sojs/openapi';
 
 @ApiSchema({ description: 'user' })
 export class UserSchema {

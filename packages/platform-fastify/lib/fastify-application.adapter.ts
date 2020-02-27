@@ -9,7 +9,7 @@ import fastify, {
   ServerOptionsAsSecureHttp,
   ServerOptionsAsSecureHttp2,
 } from 'fastify';
-import { ApplicationAdapter, ControllerRoute } from '@novajs/core';
+import { ApplicationAdapter, ControllerRoute } from '@sojs/core';
 import { FastifyMiddleware } from './interfaces';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { FastifyHttpAdapter } from './fastify-http.adapter';

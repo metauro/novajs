@@ -1,12 +1,12 @@
-### @novajs/swagger
+### @sojs/swagger
 
 Swagger Document
 
 ### Usage
 
 ```typescript
-import { FastifyPlusApplication } from '@novajs/core';
-import { DocumentBuilder } from '@novajs/swagger';
+import { FastifyPlusApplication } from '@sojs/core';
+import { DocumentBuilder } from '@sojs/swagger';
 
 async function bootstrap() {
   const app = await FastifyPlusApplication.create({

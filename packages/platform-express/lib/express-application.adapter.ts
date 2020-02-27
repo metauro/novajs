@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
-import { ApplicationAdapter, ControllerRoute } from '@novajs/core';
+import { ApplicationAdapter, ControllerRoute } from '@sojs/core';
 import { Server } from 'http';
-import { RuntimeError } from '@novajs/common';
+import { RuntimeError } from '@sojs/common';
 import { ExpressMiddleware } from './interfaces';
 import { ExpressHttpAdapter } from './express-http.adapter';
 

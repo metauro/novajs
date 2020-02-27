@@ -4,9 +4,9 @@ import {
   HttpResponse,
   Http2Request,
   Http2Response,
-} from '@novajs/core';
-import { ApiGet } from '@novajs/openapi';
-import { ApiRequestQuery } from '@novajs/openapi';
+} from '@sojs/core';
+import { ApiGet } from '@sojs/openapi';
+import { ApiRequestQuery } from '@sojs/openapi';
 
 @Controller('test')
 class TestController {

@@ -6,8 +6,8 @@ import {
   ApiRequestHeader,
   ApiRequestCookie,
   ApiRequestBody,
-} from '@novajs/openapi';
-import { ApiSchema } from '@novajs/openapi';
+} from '@sojs/openapi';
+import { ApiSchema } from '@sojs/openapi';
 
 export class Query {
   @ApiSchema()

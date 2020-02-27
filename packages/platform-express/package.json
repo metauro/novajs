@@ -1,5 +1,5 @@
 {
-  "name": "@novajs/platform-express",
+  "name": "@sojs/platform-express",
   "version": "0.2.0-alpha.0",
   "description": "modern fastify (@platform-express)",
   "author": "zhongyuanjia",

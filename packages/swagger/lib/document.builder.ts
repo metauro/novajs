@@ -2,11 +2,11 @@ import fastifySwagger from 'fastify-swagger';
 import expressSwagger from 'swagger-ui-express';
 import yaml from 'js-yaml';
 import { defaults, merge } from 'lodash';
-import { Application } from '@novajs/core';
-import { Info, OpenApi, OpenApiScanner, Responses } from '@novajs/openapi';
-import { LoggerService, ObjectTool } from '@novajs/common';
-import { FastifyApplicationAdapter } from '@novajs/platform-fastify';
-import { ExpressApplicationAdapter } from '@novajs/platform-express';
+import { Application } from '@sojs/core';
+import { Info, OpenApi, OpenApiScanner, Responses } from '@sojs/openapi';
+import { LoggerService, ObjectTool } from '@sojs/common';
+import { FastifyApplicationAdapter } from '@sojs/platform-fastify';
+import { ExpressApplicationAdapter } from '@sojs/platform-express';
 
 export class DocumentBuilder {
   private static logger = new LoggerService(`swagger ${DocumentBuilder.name}`);

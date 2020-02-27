@@ -1,5 +1,5 @@
 {
-  "name": "@novajs/swagger",
+  "name": "@sojs/swagger",
   "version": "0.2.0-alpha.0",
   "description": "modern fastify (@swagger)",
   "author": "zhongyuanjia",

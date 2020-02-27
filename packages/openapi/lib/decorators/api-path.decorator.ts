@@ -1,5 +1,5 @@
 import { PathItemMetadata } from '../interfaces';
-import { ReflectTool } from '@novajs/common';
+import { ReflectTool } from '@sojs/common';
 import { OPENAPI_METADATA } from '../constants';
 
 export function ApiPath(): ClassDecorator;

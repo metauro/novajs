@@ -4,10 +4,10 @@ import {
   KlassScanner,
   LoggerOptions,
   LoggerService,
-} from '@novajs/common';
+} from '@sojs/common';
 import { ApplicationContext, ApplicationOptions } from './interfaces';
 import { ApplicationAdapter } from './adapter';
-import { OpenApiScanner } from '@novajs/openapi';
+import { OpenApiScanner } from '@sojs/openapi';
 import { ControllerScanner } from './scanners';
 import { ControllerExplorer } from './explorers';
 

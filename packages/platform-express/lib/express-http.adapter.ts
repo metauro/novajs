@@ -1,4 +1,4 @@
-import { HttpAdapter } from '@novajs/core';
+import { HttpAdapter } from '@sojs/core';
 import { Request, Response } from 'express';
 
 export class ExpressHttpAdapter extends HttpAdapter {

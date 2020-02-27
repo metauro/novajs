@@ -1,10 +1,10 @@
-### @novajs/testing
+### @sojs/testing
 
 #### usage
 
 ```typescript
-import { Testing } from '@novajs/testing';
- import { HttpRequest } from "@novajs/server-request";
+import { Testing } from '@sojs/testing';
+ import { HttpRequest } from "@sojs/server-request";
 
 @Controller()
 class TestController {

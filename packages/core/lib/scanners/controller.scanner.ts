@@ -1,4 +1,4 @@
-import { Klass, ReflectTool } from '@novajs/common';
+import { Klass, ReflectTool } from '@sojs/common';
 import { CORE_METADATA } from '../constants';
 
 export class ControllerScanner {

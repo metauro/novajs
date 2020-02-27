@@ -1,4 +1,4 @@
-import { OperationMethod } from '@novajs/openapi';
+import { OperationMethod } from '@sojs/openapi';
 import { JSONSchema6 } from 'json-schema';
 
 export type ApplicationAdapterRouteOptions = {
