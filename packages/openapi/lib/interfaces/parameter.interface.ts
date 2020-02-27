@@ -1,6 +1,5 @@
 import { Schema } from './schema.interface';
 import { Example } from './example.interface';
-import { Reference } from './index';
 import { MediaType } from './media.interface';
 
 export type QueryParameterStyle =
