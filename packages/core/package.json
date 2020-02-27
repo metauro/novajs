@@ -1,6 +1,6 @@
 {
   "name": "@sojs/core",
-  "version": "0.3.1-alpha.0",
+  "version": "0.4.0",
   "description": "modern fastify (@core)",
   "author": "zhongyuanjia",
   "license": "MIT",
