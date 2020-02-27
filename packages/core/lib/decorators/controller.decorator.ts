@@ -1,5 +1,5 @@
-import { ReflectTool } from '@fastify-plus/common';
-import { ApiPath, PathItemMetadata } from '@fastify-plus/openapi';
+import { ReflectTool } from '@novajs/common';
+import { ApiPath, PathItemMetadata } from '@novajs/openapi';
 import { CORE_METADATA } from '../constants';
 
 export function Controller(): ClassDecorator;

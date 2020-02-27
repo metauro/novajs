@@ -1,4 +1,4 @@
-import { OperationMethod } from '@fastify-plus/openapi';
+import { OperationMethod } from '@novajs/openapi';
 
 export type ApplicationAdapterRouteOptions = {
   path: string;

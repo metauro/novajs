@@ -1,5 +1,5 @@
 import { Middleware, RouteOptions } from 'fastify';
-import { ApplicationAdapterRouteOptions } from '@fastify-plus/core';
+import { ApplicationAdapterRouteOptions } from '@novajs/core';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 
 export type FastifyRouteOptions = Omit<RouteOptions, 'url' | 'method'> &

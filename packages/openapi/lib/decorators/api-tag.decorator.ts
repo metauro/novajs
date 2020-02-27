@@ -1,5 +1,5 @@
 import { OPENAPI_METADATA } from '../constants';
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 import { Tag } from '../interfaces';
 
 export function ApiTag(metadata: string | string[] | Tag | Tag[]) {

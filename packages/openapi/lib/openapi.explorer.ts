@@ -13,7 +13,7 @@ import {
 } from './interfaces';
 import { omit, cloneDeep, merge } from 'lodash';
 import { OPENAPI_METADATA } from './constants';
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 import urljoin from 'url-join';
 
 export class OpenApiExplorer {

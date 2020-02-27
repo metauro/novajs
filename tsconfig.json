@@ -15,7 +15,7 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@fastify-plus/*": ["packages/*"]
+      "@novajs/*": ["packages/*"]
     }
   },
   "include": ["packages/**/*"],

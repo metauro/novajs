@@ -3,9 +3,9 @@ import {
   ApplicationAdapter,
   HttpRequestAdapter,
   HttpResponseAdapter,
-} from '@fastify-plus/core';
+} from '@novajs/core';
 import { Server } from 'http';
-import { RuntimeError } from '@fastify-plus/common';
+import { RuntimeError } from '@novajs/common';
 import { ExpressMiddleware, ExpressRouteOptions } from './interfaces';
 import { ExpressControllerHandlerAdapter } from './controller-handler';
 import { ExpressHttpRequestAdapter } from './http-request';

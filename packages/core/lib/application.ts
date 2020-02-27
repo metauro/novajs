@@ -4,10 +4,10 @@ import {
   KlassScanner,
   LoggerOptions,
   LoggerService,
-} from '@fastify-plus/common';
+} from '@novajs/common';
 import { ApplicationContext, ApplicationOptions } from './interfaces';
 import { ApplicationAdapter } from './adapter';
-import { OpenApiScanner } from '@fastify-plus/openapi';
+import { OpenApiScanner } from '@novajs/openapi';
 import { ControllerScanner } from './scanners';
 import { ControllerExplorer } from './explorers';
 import { ControllerHandler } from './controller-handler';

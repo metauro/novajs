@@ -1,4 +1,4 @@
-import { ControllerHandlerAdapter, ControllerRoute } from '@fastify-plus/core';
+import { ControllerHandlerAdapter, ControllerRoute } from '@novajs/core';
 import { FastifyRouteOptions } from './interfaces';
 import { RequestHandler } from 'fastify';
 

@@ -8,7 +8,7 @@ import {
   OpenApiScanner,
   Schema,
 } from '../lib';
-import { Klass, KlassScanner } from '@fastify-plus/common';
+import { Klass, KlassScanner } from '@novajs/common';
 
 export class UserSchema {
   @ApiSchema({ required: false })

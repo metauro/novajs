@@ -4,9 +4,9 @@ import {
   HttpResponse,
   Http2Request,
   Http2Response,
-} from '@fastify-plus/core';
-import { ApiGet } from '@fastify-plus/openapi';
-import { ApiRequestQuery } from '@fastify-plus/openapi';
+} from '@novajs/core';
+import { ApiGet } from '@novajs/openapi';
+import { ApiRequestQuery } from '@novajs/openapi';
 
 @Controller('test')
 class TestController {

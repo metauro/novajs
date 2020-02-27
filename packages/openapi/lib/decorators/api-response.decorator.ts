@@ -1,5 +1,5 @@
 import { OPENAPI_METADATA } from '../constants';
-import { COMMON_METADATA, HttpStatus, ReflectTool } from '@fastify-plus/common';
+import { COMMON_METADATA, HttpStatus, ReflectTool } from '@novajs/common';
 import { pick } from 'lodash';
 import { Encoding, Header, Responses } from '../interfaces';
 import isClass from 'is-class';

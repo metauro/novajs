@@ -1,4 +1,4 @@
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 import { merge } from 'lodash';
 import { Operation, OperationMetadata, OperationMethod } from '../interfaces';
 import { OPENAPI_METADATA } from '../constants';

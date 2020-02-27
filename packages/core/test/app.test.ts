@@ -6,8 +6,8 @@ import {
   ApiRequestHeader,
   ApiRequestCookie,
   ApiRequestBody,
-} from '@fastify-plus/openapi';
-import { ApiSchema } from '@fastify-plus/openapi';
+} from '@novajs/openapi';
+import { ApiSchema } from '@novajs/openapi';
 
 export class Query {
   @ApiSchema()

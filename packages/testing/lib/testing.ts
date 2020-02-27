@@ -1,7 +1,7 @@
-import { ControllerExplorer } from '@fastify-plus/core/dist/explorers';
+import { ControllerExplorer } from '@novajs/core/dist/explorers';
 import { Class } from 'utility-types';
 import supertest from 'supertest';
-import { Application } from '@fastify-plus/core';
+import { Application } from '@novajs/core';
 
 export class Testing {
   constructor(

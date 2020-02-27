@@ -1,4 +1,4 @@
-import { HttpResponseAdapter } from '@fastify-plus/core';
+import { HttpResponseAdapter } from '@novajs/core';
 import { FastifyReply } from 'fastify';
 import { ServerResponse } from 'http';
 

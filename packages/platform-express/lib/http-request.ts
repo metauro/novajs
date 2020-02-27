@@ -1,4 +1,4 @@
-import { HttpRequestAdapter } from '@fastify-plus/core';
+import { HttpRequestAdapter } from '@novajs/core';
 import { Request } from 'express';
 
 export class ExpressHttpRequestAdapter extends HttpRequestAdapter {

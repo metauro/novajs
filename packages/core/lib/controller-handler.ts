@@ -1,4 +1,4 @@
-import { COMMON_METADATA, HttpStatus, ReflectTool } from '@fastify-plus/common';
+import { COMMON_METADATA, HttpStatus, ReflectTool } from '@novajs/common';
 import { ControllerHandlerAdapter } from './adapter';
 import { ControllerExplorer } from './explorers';
 import { ApplicationAdapterRouteOptions, ControllerRoute } from './interfaces';

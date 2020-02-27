@@ -1,4 +1,4 @@
-import { COMMON_METADATA, ReflectTool } from '@fastify-plus/common';
+import { COMMON_METADATA, ReflectTool } from '@novajs/common';
 import { merge, omit } from 'lodash';
 import {
   CookieParameterStyle,
@@ -13,7 +13,7 @@ import {
 } from '../interfaces';
 import { OPENAPI_METADATA } from '../constants';
 import isClass from 'is-class';
-import { FunctionAnalyzer } from '@fastify-plus/analyzer';
+import { FunctionAnalyzer } from '@novajs/analyzer';
 import { TypeTool } from '../tools';
 import { Class } from 'utility-types';
 

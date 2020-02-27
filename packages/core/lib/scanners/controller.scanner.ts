@@ -1,4 +1,4 @@
-import { Klass, ReflectTool } from '@fastify-plus/common';
+import { Klass, ReflectTool } from '@novajs/common';
 import { CORE_METADATA } from '../constants';
 
 export class ControllerScanner {

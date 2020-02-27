@@ -1,7 +1,7 @@
 import { Class } from 'utility-types';
 import { Injectable } from 'injection-js';
 import { CORE_METADATA } from '../constants';
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 
 export function Service() {
   return (target: Class<any>) => {

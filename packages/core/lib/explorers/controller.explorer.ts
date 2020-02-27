@@ -3,7 +3,7 @@ import {
   Klass,
   ObjectTool,
   ReflectTool,
-} from '@fastify-plus/common';
+} from '@novajs/common';
 import {
   OPENAPI_METADATA,
   OpenApiExplorer,
@@ -11,7 +11,7 @@ import {
   Parameter,
   ParameterMetadata,
   RequestBody,
-} from '@fastify-plus/openapi';
+} from '@novajs/openapi';
 import {
   ApplicationContext,
   ControllerRoute,

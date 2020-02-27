@@ -1,5 +1,5 @@
 import { OPENAPI_METADATA } from '../constants';
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 
 export function ApiIgnore() {
   return ReflectTool.createMixedDecorator(OPENAPI_METADATA.API_IGNORE, {

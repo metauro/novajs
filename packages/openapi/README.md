@@ -1,4 +1,4 @@
-### @fastify-plus/openapi
+### @novajs/openapi
 
 OpenAPI v3.0 Specification Implementation
 
@@ -15,7 +15,7 @@ import {
   ApiOkResponse,
   ApiRequestBody,
   ApiRequestQuery,
-} from '@fastify-plus/openapi';
+} from '@novajs/openapi';
 import { UserSchema } from '../schema/user.schame';
 
 // optional tag, default is class name
@@ -40,7 +40,7 @@ export class UserController {
 #### Define Schema
 
 ```typescript
-import { ApiSchema } from '@fastify-plus/openapi';
+import { ApiSchema } from '@novajs/openapi';
 
 @ApiSchema({ description: 'user' })
 export class UserSchema {

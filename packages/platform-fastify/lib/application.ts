@@ -11,7 +11,7 @@ import {
   ApplicationAdapter,
   HttpRequestAdapter,
   HttpResponseAdapter,
-} from '@fastify-plus/core';
+} from '@novajs/core';
 import { FastifyMiddleware, FastifyRouteOptions } from './interfaces';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { FastifyControllerHandlerAdapter } from './controller-handler';

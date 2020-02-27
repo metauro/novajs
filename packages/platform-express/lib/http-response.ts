@@ -1,4 +1,4 @@
-import { HttpResponseAdapter } from '@fastify-plus/core';
+import { HttpResponseAdapter } from '@novajs/core';
 import { Response } from 'express';
 
 export class ExpressHttpResponseAdapter extends HttpResponseAdapter {

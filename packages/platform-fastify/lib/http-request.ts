@@ -1,6 +1,6 @@
-import { HttpRequestAdapter } from '@fastify-plus/core';
+import { HttpRequestAdapter } from '@novajs/core';
 import { FastifyRequest } from 'fastify';
-import { RuntimeError } from '@fastify-plus/common';
+import { RuntimeError } from '@novajs/common';
 
 export class FastifyHttpRequestAdapter extends HttpRequestAdapter {
   request: FastifyRequest;

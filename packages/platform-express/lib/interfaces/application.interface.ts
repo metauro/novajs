@@ -1,4 +1,4 @@
-import { ApplicationAdapterRouteOptions } from '@fastify-plus/core';
+import { ApplicationAdapterRouteOptions } from '@novajs/core';
 import { NextFunction, Request, Response } from 'express';
 
 export type ExpressRouteOptions = {

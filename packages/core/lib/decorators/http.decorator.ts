@@ -1,4 +1,4 @@
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 import { CORE_METADATA } from '../constants';
 
 export function Req() {

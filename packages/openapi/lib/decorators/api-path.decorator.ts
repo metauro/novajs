@@ -1,5 +1,5 @@
 import { PathItemMetadata } from '../interfaces';
-import { ReflectTool } from '@fastify-plus/common';
+import { ReflectTool } from '@novajs/common';
 import { OPENAPI_METADATA } from '../constants';
 
 export function ApiPath(): ClassDecorator;

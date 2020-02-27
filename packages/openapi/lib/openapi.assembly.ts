@@ -1,8 +1,4 @@
-import {
-  COMMON_METADATA,
-  ReflectTool,
-  UnknownTypeError,
-} from '@fastify-plus/common';
+import { COMMON_METADATA, ReflectTool, UnknownTypeError } from '@novajs/common';
 import { merge, omit } from 'lodash';
 import {
   OperationMetadata,

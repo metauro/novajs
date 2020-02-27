@@ -1,7 +1,7 @@
 import { ReflectiveInjector } from 'injection-js';
-import { Klass, LogLevel } from '@fastify-plus/common';
+import { Klass, LogLevel } from '@novajs/common';
 import { ApplicationAdapter } from '../adapter';
-import { OpenApi } from '@fastify-plus/openapi';
+import { OpenApi } from '@novajs/openapi';
 
 export type ApplicationOptions = {
   appRootPath: string;

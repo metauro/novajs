@@ -1,5 +1,5 @@
 {
-  "name": "@fastify-plus/core",
+  "name": "@novajs/core",
   "version": "0.0.2",
   "description": "modern fastify",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/metauro/fastify-plus"
+    "url": "https://github.com/metauro/novajs"
   },
   "private": true,
   "engines": {

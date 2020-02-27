@@ -1,10 +1,10 @@
-### @fastify-plus/testing
+### @novajs/testing
 
 #### usage
 
 ```typescript
-import { Testing } from '@fastify-plus/testing';
- import { HttpRequest } from "@fastify-plus/server-request";
+import { Testing } from '@novajs/testing';
+ import { HttpRequest } from "@novajs/server-request";
 
 @Controller()
 class TestController {

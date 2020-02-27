@@ -1,5 +1,5 @@
 import { isArray, mergeWith, union } from 'lodash';
-import { ClassTool, Klass, ReflectTool } from '@fastify-plus/common';
+import { ClassTool, Klass, ReflectTool } from '@novajs/common';
 import {
   OpenApi,
   Operation,

@@ -1,5 +1,5 @@
-import { OperationMetadata } from '@fastify-plus/openapi';
-import { Klass } from '@fastify-plus/common';
+import { OperationMetadata } from '@novajs/openapi';
+import { Klass } from '@novajs/common';
 
 export type ControllerRoute = {
   controller: Klass;
