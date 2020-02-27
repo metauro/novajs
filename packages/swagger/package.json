@@ -19,7 +19,7 @@
     "js-yaml": "^3.13.1",
     "swagger-ui-express": "^4.1.3"
   },
-  "gitHead": "6bb6604fee80a9fd242b5085b8e526fcdee5983a",
+  "gitHead": "0453e64f627b69f1f00918bf2732c09eded57a11",
   "devDependencies": {
     "@types/js-yaml": "^3.12.2",
     "@types/swagger-ui-dist": "^3.0.5",

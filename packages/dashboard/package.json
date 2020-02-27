@@ -1,7 +1,7 @@
 {
-  "name": "@sojs/common",
+  "name": "@sojs/dashboard",
   "version": "0.3.0",
-  "description": "modern fastify (@common)",
+  "description": "modern fastify (@dashboard)",
   "author": "zhongyuanjia",
   "license": "MIT",
   "main": "dist/index.js",
@@ -14,13 +14,15 @@
     "access": "public"
   },
   "dependencies": {
-    "fs-extra": "^8.1.0",
     "is-class": "^0.0.9",
+    "lodash": "^4.17.15",
     "reflect-metadata": "^0.1.13",
+    "url-join": "^4.0.1",
     "utility-types": "^3.10.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.1"
+    "@types/lodash": "^4.14.149",
+    "@types/url-join": "^4.0.0"
   },
-  "gitHead": "0453e64f627b69f1f00918bf2732c09eded57a11"
+  "gitHead": "6bb6604fee80a9fd242b5085b8e526fcdee5983a"
 }
