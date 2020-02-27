@@ -1,11 +1,4 @@
-import {
-  ApplicationAdapterRouteOptions,
-  ApplicationContext,
-  ControllerRoute,
-} from '../interfaces';
-import { HttpRequestAdapter } from './http-request.adapter';
-import { HttpResponseAdapter } from './http-response.adapter';
-import { ControllerExplorer } from '../explorers';
+import { ApplicationContext, ControllerRoute } from '../interfaces';
 import { HttpAdapter } from './http.adapter';
 
 export abstract class ApplicationAdapter {
