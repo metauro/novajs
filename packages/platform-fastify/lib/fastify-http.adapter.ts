@@ -1,11 +1,25 @@
-import { HttpRequestAdapter } from '@novajs/core';
-import { FastifyRequest } from 'fastify';
 import { RuntimeError } from '@novajs/common';
+import { HttpAdapter } from '@novajs/core';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { ServerResponse } from 'http';
 
-export class FastifyHttpRequestAdapter extends HttpRequestAdapter {
-  request: FastifyRequest;
+export class FastifyHttpAdapter extends HttpAdapter {
+  constructor(
+    protected readonly request: FastifyRequest,
+    protected readonly response: FastifyReply<ServerResponse>,
+  ) {
+    super();
+  }
 
-  getBody(): Record<string, any> {
+  getRequest() {
+    return this.request;
+  }
+
+  getResponse() {
+    return this.response;
+  }
+
+  getBody() {
     return this.request.body;
   }
 
@@ -39,5 +53,24 @@ export class FastifyHttpRequestAdapter extends HttpRequestAdapter {
   getQuery(name: string): any;
   getQuery(name?: string) {
     return name ? this.request.query[name] : this.request.query;
+  }
+
+  hasSent() {
+    return this.response.sent;
+  }
+
+  send(body: any) {
+    this.response.send(body);
+    return this;
+  }
+
+  setHeader(name: string, value: string) {
+    this.response.header(name, value);
+    return this;
+  }
+
+  setStatus(code: number) {
+    this.response.status(code);
+    return this;
   }
 }

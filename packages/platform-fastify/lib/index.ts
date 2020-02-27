@@ -1,1 +1,1 @@
-export * from './application';
+export * from './fastify-application.adapter';

@@ -1,5 +1,7 @@
 import fastify, {
   FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
   HTTPMethod,
   Middleware,
   ServerOptionsAsHttp,
@@ -7,21 +9,13 @@ import fastify, {
   ServerOptionsAsSecureHttp,
   ServerOptionsAsSecureHttp2,
 } from 'fastify';
-import {
-  ApplicationAdapter,
-  HttpRequestAdapter,
-  HttpResponseAdapter,
-} from '@novajs/core';
-import { FastifyMiddleware, FastifyRouteOptions } from './interfaces';
+import { ApplicationAdapter, ControllerRoute } from '@novajs/core';
+import { FastifyMiddleware } from './interfaces';
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import { FastifyControllerHandlerAdapter } from './controller-handler';
-import { FastifyHttpRequestAdapter } from './http-request';
-import { FastifyHttpResponseAdapter } from './http-response';
+import { FastifyHttpAdapter } from './fastify-http.adapter';
 
 export class FastifyApplicationAdapter extends ApplicationAdapter {
   readonly server: FastifyInstance;
-
-  readonly controllerHandler = new FastifyControllerHandlerAdapter(this.ctx);
 
   static create(
     options?:
@@ -44,19 +38,16 @@ export class FastifyApplicationAdapter extends ApplicationAdapter {
     this.server = fastify(options);
   }
 
-  getHttpRequestAdapter(request: any): HttpRequestAdapter {
-    return new FastifyHttpRequestAdapter(request);
+  getHttpAdapter(request: FastifyRequest, reply: FastifyReply<ServerResponse>) {
+    return new FastifyHttpAdapter(request, reply);
   }
 
-  getHttpResponseAdapter(response: any): HttpResponseAdapter {
-    return new FastifyHttpResponseAdapter(response);
-  }
-
-  route({ path, method, ...options }: FastifyRouteOptions) {
+  route({ nodeStylePath, method, injectedHandler, schema }: ControllerRoute) {
     this.server.route({
-      url: path,
+      url: nodeStylePath,
       method: method.toUpperCase() as HTTPMethod,
-      ...options,
+      handler: injectedHandler,
+      schema,
     });
     return this;
   }

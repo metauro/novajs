@@ -58,12 +58,12 @@ export class OpenApiExplorer {
   }
 
   static exploreOperation(target: Object, operation: Function): Operation {
-    const operationMetadata = ReflectTool.getMetadata(
+    const operationMetadata = ReflectTool.getMetadata<OperationMetadata>(
       OPENAPI_METADATA.API_OPERATION,
       operation,
     );
 
-    if (!operation) {
+    if (!operationMetadata) {
       return null;
     }
 
@@ -88,11 +88,14 @@ export class OpenApiExplorer {
     operation: Function,
   ): Parameter[] {
     const result = [];
-    for (const metadata of ReflectTool.getMetadata<ParameterMetadata[]>(
-      OPENAPI_METADATA.API_REQUEST_PARAMETER,
-      target,
-      operation.name,
-    ).filter(v => !!v)) {
+    const metadataList = (
+      ReflectTool.getMetadata<ParameterMetadata[]>(
+        OPENAPI_METADATA.API_REQUEST_PARAMETER,
+        target,
+        operation.name,
+      ) || []
+    ).filter(v => !!v);
+    for (const metadata of metadataList) {
       if (metadata.schemas) {
         result.push(
           ...metadata.schemas.map(schema => ({
@@ -110,10 +113,12 @@ export class OpenApiExplorer {
   }
 
   static exploreRequestBody(target: Object, operation: Function): RequestBody {
-    return ReflectTool.getMetadata<RequestBody[]>(
-      OPENAPI_METADATA.API_REQUEST_BODY,
-      target,
-      operation.name,
+    return (
+      ReflectTool.getMetadata<RequestBody[]>(
+        OPENAPI_METADATA.API_REQUEST_BODY,
+        target,
+        operation.name,
+      ) || []
     ).filter(v => !!v)[0];
   }
 

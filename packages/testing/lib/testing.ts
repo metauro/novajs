@@ -8,11 +8,12 @@ export class Testing {
     private readonly app: Application,
     private readonly agent: supertest.SuperTest<supertest.Test>,
   ) {
+    const controllerExplorer = new ControllerExplorer(app.getContext());
     for (const k of app.getContext().klasses) {
-      for (const r of ControllerExplorer.exploreRoutes(k)) {
+      for (const r of controllerExplorer.exploreRoutes(k)) {
         // hack all route handler
         r.handler = async (...args: any[]) => {
-          const params = ControllerExplorer.exploreRouteParams(r);
+          const params = controllerExplorer.exploreRouteParams(r);
           const test = agent[r.method](r.path);
           let path = r.path;
           params.forEach((p, i) => {

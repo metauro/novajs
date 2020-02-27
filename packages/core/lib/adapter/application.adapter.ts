@@ -1,10 +1,12 @@
 import {
   ApplicationAdapterRouteOptions,
   ApplicationContext,
+  ControllerRoute,
 } from '../interfaces';
-import { ControllerHandlerAdapter } from './controller-handler.adapter';
 import { HttpRequestAdapter } from './http-request.adapter';
 import { HttpResponseAdapter } from './http-response.adapter';
+import { ControllerExplorer } from '../explorers';
+import { HttpAdapter } from './http.adapter';
 
 export abstract class ApplicationAdapter {
   protected ctx: ApplicationContext;
@@ -14,18 +16,14 @@ export abstract class ApplicationAdapter {
     return this;
   }
 
-  abstract readonly controllerHandler: ControllerHandlerAdapter;
-
   /**
    * the http lib server instance
    */
   abstract readonly server: any;
 
-  abstract getHttpRequestAdapter(request: any): HttpRequestAdapter;
+  abstract getHttpAdapter(...args: any[]): HttpAdapter;
 
-  abstract getHttpResponseAdapter(response: any): HttpResponseAdapter;
-
-  abstract route(options: ApplicationAdapterRouteOptions): this;
+  abstract route(route: ControllerRoute): this;
 
   abstract use(middleware: Function): this;
   abstract use(path: string, middleware: Function): this;

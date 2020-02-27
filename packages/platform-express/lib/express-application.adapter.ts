@@ -1,22 +1,14 @@
-import express, { Express } from 'express';
-import {
-  ApplicationAdapter,
-  HttpRequestAdapter,
-  HttpResponseAdapter,
-} from '@novajs/core';
+import express, { Express, Request, Response } from 'express';
+import { ApplicationAdapter, ControllerRoute } from '@novajs/core';
 import { Server } from 'http';
 import { RuntimeError } from '@novajs/common';
-import { ExpressMiddleware, ExpressRouteOptions } from './interfaces';
-import { ExpressControllerHandlerAdapter } from './controller-handler';
-import { ExpressHttpRequestAdapter } from './http-request';
-import { ExpressHttpResponseAdapter } from './http-response';
+import { ExpressMiddleware } from './interfaces';
+import { ExpressHttpAdapter } from './express-http.adapter';
 
 export class ExpressApplicationAdapter extends ApplicationAdapter {
   readonly server: Express;
 
   private internalServer: Server;
-
-  readonly controllerHandler = new ExpressControllerHandlerAdapter(this.ctx);
 
   static create() {
     return new ExpressApplicationAdapter();
@@ -27,16 +19,12 @@ export class ExpressApplicationAdapter extends ApplicationAdapter {
     this.server = express();
   }
 
-  getHttpRequestAdapter(request: any): HttpRequestAdapter {
-    return new ExpressHttpRequestAdapter(request);
+  getHttpAdapter(request: Request, response: Response) {
+    return new ExpressHttpAdapter(request, response);
   }
 
-  getHttpResponseAdapter(response: any): HttpResponseAdapter {
-    return new ExpressHttpResponseAdapter(response);
-  }
-
-  route({ path, method, handler }: ExpressRouteOptions) {
-    this.server.route(path)[method](handler);
+  route({ nodeStylePath, method, injectedHandler }: ControllerRoute) {
+    this.server.route(nodeStylePath)[method](injectedHandler);
     return this;
   }
 

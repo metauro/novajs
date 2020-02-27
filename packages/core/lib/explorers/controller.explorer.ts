@@ -3,6 +3,7 @@ import {
   Klass,
   ObjectTool,
   ReflectTool,
+  HttpStatus,
 } from '@novajs/common';
 import {
   OPENAPI_METADATA,
@@ -22,13 +23,9 @@ import { cloneDeep } from 'lodash';
 import { CORE_METADATA } from '../constants';
 
 export class ControllerExplorer {
-  static create(ctx: ApplicationContext) {
-    return new ControllerExplorer(ctx);
-  }
-
   constructor(protected readonly ctx: ApplicationContext) {}
 
-  static exploreRoutes(controller: Klass): ControllerRoute[] {
+  exploreRoutes(controller: Klass): ControllerRoute[] {
     const c = controller.type.prototype;
     return ReflectTool.getOwnDecoratedFunctionKeys(c)
       .map(k => {
@@ -37,27 +34,34 @@ export class ControllerExplorer {
           OPENAPI_METADATA.API_OPERATION,
           operation,
         );
-        return metadata
-          ? {
-              ...metadata,
-              path: OpenApiExplorer.explorePath(controller.type, operation)
-                /**
-                 * most nodejs route define path variable such as :id, but openapi use {id}
-                 * need transform it
-                 */
-                .replace(/{(.*)}\/?/, (_, match) => {
-                  return `:${match}`;
-                }),
-              controller,
-              key: k,
-              handler: c[k],
-            }
-          : null;
+
+        if (!metadata) {
+          return null;
+        }
+
+        const route = {
+          ...metadata,
+          ...OpenApiExplorer.exploreOperation(c, operation),
+          nodeStylePath: OpenApiExplorer.explorePath(
+            controller.type,
+            operation,
+          ).replace(/{(.*)}\/?/, (_, match) => {
+            return `:${match}`;
+          }),
+          path: OpenApiExplorer.explorePath(controller.type, operation),
+          controller,
+          handler: c[k],
+          injectedHandler: null,
+          schema: {},
+        };
+        route.schema = this.exploreRouteSchema(route);
+        route.injectedHandler = this.hackRouteHandler(route);
+        return route;
       })
       .filter(v => !!v);
   }
 
-  static exploreRouteParams(route: ControllerRoute): ControllerRouteParam[] {
+  exploreRouteParams(route: ControllerRoute): ControllerRouteParam[] {
     const c = route.controller.type.prototype;
     const requestParams =
       ReflectTool.getOwnMetadata<ParameterMetadata[]>(
@@ -89,7 +93,7 @@ export class ControllerExplorer {
           route.handler.name,
         ) || [])[i]
       ) {
-        keys.push('request');
+        keys.push('httpAdapter', 'getRequest()');
       } else if (
         (ReflectTool.getOwnMetadata<boolean[]>(
           CORE_METADATA.RES,
@@ -97,10 +101,10 @@ export class ControllerExplorer {
           route.handler.name,
         ) || [])[i]
       ) {
-        keys.push('response');
+        keys.push('httpAdapter', 'getResponse()');
       } else if (requestParam) {
         keys.push(
-          'requestAdapter',
+          'httpAdapter',
           `${
             {
               header: 'getHeader',
@@ -114,14 +118,65 @@ export class ControllerExplorer {
         result.name = requestParam.name;
       } else if (requestBody) {
         result.in = 'body';
-        keys.push('requestAdapter', 'getBody()');
+        keys.push('httpAdapter', 'getBody()');
       }
 
       result.inPath = keys.join('.');
-      console.log(result.inPath);
 
       return result;
     });
+  }
+
+  private hackRouteHandler(route: ControllerRoute) {
+    const returnType = ReflectTool.getOwnMetadata(
+      COMMON_METADATA.RETURN_TYPE,
+      route.controller.type.prototype,
+      route.handler.name,
+    );
+    const paramsCode = this.exploreRouteParams(route)
+      .map(p => p.inPath)
+      .join(',');
+    let injectedHandler: Function;
+
+    if (returnType === Promise) {
+      injectedHandler = new Function(
+        'httpAdapter, instance, handler',
+        `
+return handler.apply(instance, [${paramsCode}]);
+`,
+      );
+    } else {
+      injectedHandler = new Function(
+        'httpAdapter, instance, handler',
+        `
+return new Promise((resolve, reject) => {
+  try {
+    resolve(handler.apply(instance, [${paramsCode}]));
+  } catch(err) {
+    reject(err);
+  }
+})
+`,
+      );
+    }
+
+    return async (...args: any[]) => {
+      const httpAdapter = this.ctx.adapter.getHttpAdapter(...args);
+
+      try {
+        const result = await injectedHandler(
+          httpAdapter,
+          this.ctx.injector.get(route.controller.type),
+          route.handler,
+        );
+
+        if (!httpAdapter.hasSent()) {
+          httpAdapter.setStatus(HttpStatus.OK).send(result);
+        }
+      } catch (err) {
+        httpAdapter.setStatus(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+      }
+    };
   }
 
   exploreRouteSchema(route: ControllerRoute): RouteSchema {
@@ -195,7 +250,7 @@ export class ControllerExplorer {
       p.required && params[key].required.push(p.name);
     }
 
-    const responses = OpenApiExplorer.exploreResponses(route.handler);
+    // const responses = OpenApiExplorer.exploreResponses(route.handler);
     // for (const k of Object.keys(responses)) {
     //   const r = responses[k] as Response;
     //   response[k] = cloneDeep(r.content[Object.keys(r.content)[0]].schema);

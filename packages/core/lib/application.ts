@@ -10,14 +10,11 @@ import { ApplicationAdapter } from './adapter';
 import { OpenApiScanner } from '@novajs/openapi';
 import { ControllerScanner } from './scanners';
 import { ControllerExplorer } from './explorers';
-import { ControllerHandler } from './controller-handler';
 
 export class Application<
   Adapter extends ApplicationAdapter = ApplicationAdapter
 > {
   private static logger = new LoggerService(Application.name);
-
-  protected controllerHandler = new ControllerHandler(this.ctx);
 
   static async create(options: ApplicationOptions) {
     const klasses = await KlassScanner.scan(options.appRootPath);
@@ -32,16 +29,13 @@ export class Application<
   }
 
   protected constructor(protected readonly ctx: ApplicationContext) {
+    const controllerExplorer = new ControllerExplorer(ctx);
     for (const controller of ControllerScanner.scan(ctx.klasses)) {
-      for (const route of ControllerExplorer.exploreRoutes(controller)) {
-        if (route.method === 'trace') {
-          continue;
-        }
-
-        const options = this.controllerHandler.parseRouteOptions(route);
-        this.ctx.adapter.route(options);
+      for (const route of controllerExplorer.exploreRoutes(controller)) {
+        console.log('get route:', JSON.stringify(route, null, 2));
+        this.ctx.adapter.route(route);
         Application.logger.info(
-          `map route to [method: ${options.method}] [path: ${options.path}]`,
+          `map route to [method: ${route.method}] [path: ${route.path}]`,
         );
       }
     }

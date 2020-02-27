@@ -1,1 +1,1 @@
-export * from './application';
+export * from './express-application.adapter';
