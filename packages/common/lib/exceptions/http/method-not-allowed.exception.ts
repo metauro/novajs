@@ -3,12 +3,10 @@ import { HttpStatus } from '../../enum';
 
 export class MethodNotAllowedException extends HttpException {
   constructor(message?: string | object | any) {
-    super(
-      HttpException.createBody(
-        HttpStatus.METHOD_NOT_ALLOWED,
-        'Method Not Allowed',
-        message,
-      ),
-    );
+    super({
+      statusCode: HttpStatus.METHOD_NOT_ALLOWED,
+      statusMessage: 'Method Not Allowed',
+      message,
+    });
   }
 }

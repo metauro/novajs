@@ -3,12 +3,10 @@ import { HttpStatus } from '../../enum';
 
 export class RequestTimeoutException extends HttpException {
   constructor(message?: string | object | any) {
-    super(
-      HttpException.createBody(
-        HttpStatus.REQUEST_TIMEOUT,
-        'Request Timeout',
-        message,
-      ),
-    );
+    super({
+      statusCode: HttpStatus.REQUEST_TIMEOUT,
+      statusMessage: 'Request Timeout',
+      message,
+    });
   }
 }

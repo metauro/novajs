@@ -3,6 +3,10 @@ import { HttpStatus } from '../../enum';
 
 export class NotFoundException extends HttpException {
   constructor(message?: string | object | any) {
-    super(HttpException.createBody(HttpStatus.NOT_FOUND, 'Not Found', message));
+    super({
+      statusCode: HttpStatus.NOT_FOUND,
+      statusMessage: 'Not Found',
+      message,
+    });
   }
 }
