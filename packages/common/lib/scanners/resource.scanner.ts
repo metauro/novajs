@@ -27,10 +27,14 @@ export class ResourceScanner {
         if (stat.isDirectory()) {
           result.push(...(await ResourceScanner.scan(absolutePath)));
         } else {
+          const declarationFilepath = absolutePath.endsWith('.ts')
+            ? absolutePath
+            : `${absolutePath.slice(0, -3)}.d.ts`;
           result.push({
             ...parsedPath,
             path: absolutePath,
             content: await fs.readFile(absolutePath, 'utf8'),
+            declarationContent: await fs.readFile(declarationFilepath, 'utf8'),
           });
         }
       }),
