@@ -26,9 +26,9 @@ export type Parameter = {
   allowEmptyValue?: boolean;
   explode?: boolean;
   allowReserved?: boolean;
-  schema?: Schema | Reference;
+  schema?: Schema;
   example?: any;
-  examples?: Record<string, Example | Reference>;
+  examples?: Record<string, Example>;
   content?: Record<string, MediaType>;
 } & (
   | {
@@ -51,5 +51,5 @@ export type Parameter = {
 );
 
 export type ParameterMetadata = Parameter & {
-  schemas?: Array<Schema | Reference>;
+  schemas?: Schema[];
 };

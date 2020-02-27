@@ -19,6 +19,7 @@ unlink:
 	do \
       cd $$dir; \
       yarn unlink; \
+      cd ../../; \
     done;
 
 .PHONY: gen-license

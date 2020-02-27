@@ -3,6 +3,11 @@ import { Klass } from '@fastify-plus/common';
 
 export type ControllerRoute = {
   controller: Klass;
-  key: string;
   handler: Function;
 } & OperationMetadata;
+
+export type ControllerRouteParam = {
+  in?: 'path' | 'query' | 'header' | 'body' | 'cookie';
+  name: string;
+  inPath: string;
+};

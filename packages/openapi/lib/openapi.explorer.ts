@@ -1,6 +1,9 @@
 import {
+  Operation,
   OperationMetadata,
+  Parameter,
   ParameterMetadata,
+  PathItem,
   PathItemMetadata,
   RequestBody,
   Responses,
@@ -8,60 +11,129 @@ import {
   SecurityRequirement,
   Tag,
 } from './interfaces';
+import { omit, cloneDeep, merge } from 'lodash';
 import { OPENAPI_METADATA } from './constants';
+import { ReflectTool } from '@fastify-plus/common';
+import urljoin from 'url-join';
 
 export class OpenApiExplorer {
-  static create() {
-    return new OpenApiExplorer();
+  /**
+   * @param target
+   * @param operation
+   * @returns api full path
+   */
+  static explorePath(target: Object, operation: Function): string {
+    const pathItemMetadata = ReflectTool.getMetadata<PathItemMetadata>(
+      OPENAPI_METADATA.API_PATH_ITEM,
+      target,
+    );
+    const operationMetadata = ReflectTool.getMetadata<OperationMetadata>(
+      OPENAPI_METADATA.API_OPERATION,
+      operation,
+    );
+
+    return (
+      urljoin(
+        '/',
+        pathItemMetadata ? pathItemMetadata.prefix : '',
+        operationMetadata ? operationMetadata.path : '',
+      )
+        /**
+         * most nodejs route define path variable such as :id, but openapi use {id}
+         * need transform it
+         */
+        .replace(/:(.*)\/?/, (_, match) => {
+          return `{${match}}`;
+        })
+    );
   }
 
-  static exploreIsIgnore<T extends Object>(target: T, key?: keyof T): boolean {
-    return !!Reflect.getMetadata(OPENAPI_METADATA.API_IGNORE, target, key);
+  static explorePathItem(target: Object): PathItem {
+    const pathItemMetadata = ReflectTool.getMetadata<PathItemMetadata>(
+      OPENAPI_METADATA.API_PATH_ITEM,
+      target,
+    );
+
+    return omit(pathItemMetadata, 'prefix');
   }
 
-  static exploreOperation(target: Function): OperationMetadata {
-    return Reflect.getMetadata(OPENAPI_METADATA.API_OPERATION, target);
+  static exploreOperation(target: Object, operation: Function): Operation {
+    const operationMetadata = ReflectTool.getMetadata(
+      OPENAPI_METADATA.API_OPERATION,
+      operation,
+    );
+
+    if (!operation) {
+      return null;
+    }
+
+    return merge<any, Partial<Operation>>(
+      omit(operationMetadata, 'method', 'path'),
+      {
+        tags: this.exploreTags(operation).map(t => t.name),
+        security: this.exploreSecurity(operation),
+        parameters: this.exploreRequestParameters(target, operation),
+        requestBody: this.exploreRequestBody(target, operation),
+        responses: this.exploreResponses(operation),
+      },
+    );
   }
 
-  static explorePath(target: Object): PathItemMetadata {
-    return Reflect.getMetadata(OPENAPI_METADATA.API_PATH_ITEM, target);
+  static exploreIsIgnore(target: Object): boolean {
+    return !!ReflectTool.getMetadata(OPENAPI_METADATA.API_IGNORE, target);
   }
 
   static exploreRequestParameters(
     target: Object,
-    key: string,
-  ): ParameterMetadata[] {
-    return (
-      Reflect.getMetadata(
-        OPENAPI_METADATA.API_REQUEST_PARAMETER,
-        target,
-        key,
-      ) || []
-    );
+    operation: Function,
+  ): Parameter[] {
+    const result = [];
+    for (const metadata of ReflectTool.getMetadata<ParameterMetadata[]>(
+      OPENAPI_METADATA.API_REQUEST_PARAMETER,
+      target,
+      operation.name,
+    ).filter(v => !!v)) {
+      if (metadata.schemas) {
+        result.push(
+          ...metadata.schemas.map(schema => ({
+            ...omit(metadata, 'schemas'),
+            schema,
+          })),
+        );
+        result.push(...metadata.schemas);
+      } else {
+        result.push(cloneDeep(metadata));
+      }
+    }
+
+    return result.filter(v => !!v);
   }
 
-  static exploreRequestBodies(target: Object, key: string): RequestBody[] {
-    return (
-      Reflect.getMetadata(OPENAPI_METADATA.API_REQUEST_BODY, target, key) || []
-    );
+  static exploreRequestBody(target: Object, operation: Function): RequestBody {
+    return ReflectTool.getMetadata<RequestBody[]>(
+      OPENAPI_METADATA.API_REQUEST_BODY,
+      target,
+      operation.name,
+    ).filter(v => !!v)[0];
   }
 
-  static exploreResponses(target: Function): Responses {
-    return Reflect.getMetadata(OPENAPI_METADATA.API_RESPONSES, target);
+  static exploreResponses(operation: Function): Responses {
+    return ReflectTool.getMetadata(OPENAPI_METADATA.API_RESPONSES, operation);
   }
 
   static exploreSchema(target: Object, key?: string): SchemaMetadata {
     return Reflect.getMetadata(OPENAPI_METADATA.API_SCHEMA, target, key);
   }
 
-  static exploreSecurity<T extends Object>(
-    target: T,
-    key?: keyof T,
-  ): SecurityRequirement {
-    return Reflect.getMetadata(OPENAPI_METADATA.API_SECURITY, target, key);
+  static exploreSecurity(target: Object): SecurityRequirement[] {
+    return cloneDeep(
+      ReflectTool.getMetadata(OPENAPI_METADATA.API_SECURITY, target) || [],
+    );
   }
 
-  static exploreTag<T extends Object>(target: T, key?: keyof T): Tag {
-    return Reflect.getMetadata(OPENAPI_METADATA.API_TAG, target, key);
+  static exploreTags(target: Object): Tag[] {
+    return cloneDeep(
+      ReflectTool.getMetadata(OPENAPI_METADATA.API_TAG, target) || [],
+    );
   }
 }

@@ -1,19 +1,30 @@
-import urljoin from 'url-join';
-import { isArray, merge, mergeWith, union } from 'lodash';
+import { isArray, mergeWith, union } from 'lodash';
 import { ClassTool, Klass, ReflectTool } from '@fastify-plus/common';
 import {
+  OpenApi,
+  Operation,
   OperationMetadata,
   PathItem,
-  PathItemMetadata,
   Schema,
   Tag,
 } from './interfaces';
 import { OPENAPI_METADATA } from './constants';
 import { OpenApiAssembly } from './openapi.assembly';
+import { OpenApiExplorer } from './openapi.explorer';
 
 export class OpenApiScanner {
-  static scan(klasses: Klass[]) {
+  /**
+   * collect open api info
+   * @param klasses
+   */
+  static scan(klasses: Klass[]): OpenApi {
     return {
+      openapi: '3.0.3',
+      info: {
+        title: '',
+        version: '',
+      },
+      servers: [],
       tags: this.scanTags(klasses),
       paths: this.scanPaths(klasses),
       components: {
@@ -30,9 +41,10 @@ export class OpenApiScanner {
   }
 
   static scanTags(klasses: Klass[]): Tag[] {
-    return klasses
-      .map(k => ReflectTool.getOwnMetadata(OPENAPI_METADATA.API_TAG, k.type))
-      .filter(v => !!v);
+    return klasses.reduce((result, k) => {
+      result.push(...OpenApiExplorer.exploreTags(k.type));
+      return result;
+    }, []);
   }
 
   static scanSchemas(klasses: Klass[]): Record<string, Schema> {
@@ -68,41 +80,52 @@ export class OpenApiScanner {
     const result: Record<string, PathItem> = {};
 
     for (const { type } of klasses) {
-      const pathItemMetadata = ReflectTool.getMetadata<PathItemMetadata>(
-        OPENAPI_METADATA.API_PATH_ITEM,
-        type,
-      );
+      if (OpenApiExplorer.exploreIsIgnore(type)) {
+        continue;
+      }
 
-      for (const key of ReflectTool.getOwnDecoratedFunctionKeys(
+      const operations: Function[] = ReflectTool.getOwnDecoratedFunctionKeys(
         type.prototype,
-      )) {
-        const op = ReflectTool.getMetadata<OperationMetadata>(
-          OPENAPI_METADATA.API_OPERATION,
-          type.prototype[key],
-        );
+      )
+        .filter(
+          k =>
+            !!ReflectTool.getMetadata<OperationMetadata>(
+              OPENAPI_METADATA.API_OPERATION,
+              type.prototype[k],
+            ),
+        )
+        .map(k => type.prototype[k]);
 
-        if (!op) {
+      for (const operation of operations) {
+        if (OpenApiExplorer.exploreIsIgnore(operation)) {
           continue;
         }
 
-        const path = urljoin(
-          '/',
-          pathItemMetadata ? pathItemMetadata.prefix : '',
-          op.path,
-        )
-          /**
-           * fastify use :id, but openapi use {id}
-           * need transform it
-           */
-          .replace(/:(.*)\/?/, (_, match) => {
-            return `{${match}}`;
-          });
+        const path = OpenApiExplorer.explorePath(type, operation);
 
         if (!result[path]) {
-          result[path] = {};
+          result[path] = OpenApiExplorer.explorePathItem(type);
         }
 
-        merge(result[path], OpenApiAssembly.assemblePathItem(type, key));
+        const operationMetadata = ReflectTool.getMetadata(
+          OPENAPI_METADATA.API_OPERATION,
+          operation,
+        );
+        result[path][operationMetadata.method] = mergeWith<
+          Partial<Operation>,
+          Operation
+        >(
+          {
+            tags: OpenApiExplorer.exploreTags(type).map(t => t.name),
+            security: OpenApiExplorer.exploreSecurity(type),
+          },
+          OpenApiExplorer.exploreOperation(type.prototype, operation),
+          (objValue, srcValue) => {
+            if (isArray(objValue) && objValue.length === 0) {
+              return srcValue;
+            }
+          },
+        );
       }
     }
 

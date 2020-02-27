@@ -28,7 +28,7 @@ export type SecuritySchema = (
       in: 'query' | 'header' | 'cookie';
     }
   | {
-      type: 'server';
+      type: 'http';
       scheme: string;
       bearerFormat?: string;
     }
@@ -44,4 +44,7 @@ export type SecuritySchema = (
   description?: string;
 };
 
-export type SecurityRequirement = Record<string, string[]>;
+export type SecurityRequirement = Record<
+  'bearer' | 'api_key' | string,
+  string[]
+>;

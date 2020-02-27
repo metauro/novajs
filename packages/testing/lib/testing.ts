@@ -1,0 +1,52 @@
+import { ControllerExplorer } from '@fastify-plus/core/dist/explorers';
+import { Class } from 'utility-types';
+import supertest from 'supertest';
+import { Application } from '@fastify-plus/core';
+
+export class Testing {
+  constructor(
+    private readonly app: Application,
+    private readonly agent: supertest.SuperTest<supertest.Test>,
+  ) {
+    for (const k of app.getContext().klasses) {
+      for (const r of ControllerExplorer.exploreRoutes(k)) {
+        // hack all route handler
+        r.handler = async (...args: any[]) => {
+          const params = ControllerExplorer.exploreRouteParams(r);
+          const test = agent[r.method](r.path);
+          let path = r.path;
+          params.forEach((p, i) => {
+            switch (p.in) {
+              case 'path':
+                path = path.replace(`:${p.name}`, args[i]);
+                break;
+              case 'query':
+                test.query(args[i]);
+                break;
+              case 'body':
+                test.send(args[i]);
+                break;
+              case 'cookie':
+              case 'header':
+                test.set(args[i]);
+                break;
+            }
+          });
+          return test;
+        };
+      }
+    }
+  }
+
+  get<T extends Class<any>>(obj: T): InstanceType<T> {
+    return this.app.getContext().injector.get(obj);
+  }
+
+  static create(app: Application) {
+    return new Testing(app, supertest.agent(app.getContext().adapter.server));
+  }
+
+  async close() {
+    return this.app.close();
+  }
+}

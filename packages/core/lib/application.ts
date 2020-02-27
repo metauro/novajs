@@ -1,54 +1,77 @@
-import fastify from 'fastify';
 import { ReflectiveInjector } from 'injection-js';
-import { KlassScanner, internalLoggerService } from '@fastify-plus/common';
+import {
+  ILogger,
+  KlassScanner,
+  LoggerOptions,
+  LoggerService,
+} from '@fastify-plus/common';
 import { ApplicationContext, ApplicationOptions } from './interfaces';
+import { ApplicationAdapter } from './adapter';
+import { OpenApiScanner } from '@fastify-plus/openapi';
+import { ControllerScanner } from './scanners';
+import { ControllerExplorer } from './explorers';
 import { ControllerHandler } from './controller-handler';
 
-export class FastifyPlusApplication {
-  constructor(protected readonly ctx: ApplicationContext) {}
+export class Application<
+  Adapter extends ApplicationAdapter = ApplicationAdapter
+> {
+  private static logger = new LoggerService(Application.name);
 
-  static async create(
-    options: ApplicationOptions,
-    http = fastify(options.fastifyOptions),
-  ) {
+  protected controllerHandler = new ControllerHandler(this.ctx);
+
+  static async create(options: ApplicationOptions) {
     const klasses = await KlassScanner.scan(options.appRootPath);
-    return new FastifyPlusApplication({
-      http,
+    const ctx = {
       klasses,
       injector: ReflectiveInjector.resolveAndCreate(klasses.map(k => k.type)),
+      openApi: OpenApiScanner.scan(klasses),
       ...options,
-    });
+    } as ApplicationContext;
+    ctx.adapter.setContext(ctx);
+    return new Application(ctx);
+  }
+
+  protected constructor(protected readonly ctx: ApplicationContext) {
+    for (const controller of ControllerScanner.scan(ctx.klasses)) {
+      for (const route of ControllerExplorer.exploreRoutes(controller)) {
+        if (route.method === 'trace') {
+          continue;
+        }
+
+        const options = this.controllerHandler.parseRouteOptions(route);
+        this.ctx.adapter.route(options);
+        Application.logger.info(
+          `map route to [method: ${options.method}] [path: ${options.path}]`,
+        );
+      }
+    }
   }
 
   getContext() {
     return this.ctx;
   }
 
-  getFastifyInstance() {
-    return this.ctx.http;
+  async listen(port: number, address?: string) {
+    await this.ctx.adapter.listen(port, address);
+    Application.logger.info(
+      `The server has listen on ${address || '127.0.0.1'}:${port}`,
+    );
   }
 
-  async start(port: number, address?: string) {
-    const controller = new ControllerHandler(this.ctx);
-    await controller.registerControllers();
-    await this.listen(port, address);
+  async close() {
+    await this.ctx.adapter.close();
+    Application.logger.info(
+      `The server has been close at ${new Date().toLocaleString()}`,
+    );
   }
 
-  listen(port: number, address?: string) {
-    const { http } = this.ctx;
-    process.on('SIGINT', async () => {
-      await http.close();
-      process.exit();
-    });
-    return new Promise((resolve, reject) => {
-      http.listen(port, address || 'localhost', (err, address) => {
-        if (err) {
-          reject(err);
-        }
+  overrideLogger(logger: ILogger) {
+    LoggerService.override(logger);
+    return this;
+  }
 
-        internalLoggerService.info(`The server has listen on ${address}`);
-        resolve();
-      });
-    });
+  setLoggerOptions(options: LoggerOptions) {
+    LoggerService.setOptions(options);
+    return this;
   }
 }

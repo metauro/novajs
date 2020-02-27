@@ -1,7 +1,6 @@
 import { Discriminator } from './discriminator.interface';
 import { XML } from './xml.interface';
 import { ExternalDocument } from './external-document.interface';
-import { Reference } from './reference.interface';
 
 /**
  * @see {@link https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#schemaObject}
@@ -48,13 +47,13 @@ export type Schema = {
   minProperties?: number;
   required?: string[];
   enum?: any[];
-  allOf?: Array<Schema | Reference>;
-  oneOf?: Array<Schema | Reference>;
-  anyOf?: Array<Schema | Reference>;
-  not?: Schema | Reference;
-  items?: Schema | Reference | Array<Schema | Reference>;
-  properties?: Record<string, Schema | Reference>;
-  additionalProperties?: Schema | Reference | boolean;
+  allOf?: Schema[];
+  oneOf?: Schema[];
+  anyOf?: Schema[];
+  not?: Schema;
+  items?: Schema | Schema[];
+  properties?: Record<string, Schema>;
+  additionalProperties?: Schema | boolean;
   description?: string;
   default?: any;
   nullable?: boolean;
@@ -79,11 +78,11 @@ export type SchemaMetadata = Omit<
   | 'additionalProperties'
 > & {
   required?: boolean;
-  allOf?: Array<SchemaMetadata | Reference>;
-  oneOf?: Array<SchemaMetadata | Reference>;
-  anyOf?: Array<SchemaMetadata | Reference>;
-  not?: SchemaMetadata | Reference;
-  items?: SchemaMetadata | Reference | Array<SchemaMetadata | Reference>;
-  properties?: Record<string, SchemaMetadata | Reference>;
-  additionalProperties?: SchemaMetadata | Reference | boolean;
+  allOf?: SchemaMetadata[];
+  oneOf?: SchemaMetadata[];
+  anyOf?: SchemaMetadata[];
+  not?: SchemaMetadata;
+  items?: SchemaMetadata | SchemaMetadata[];
+  properties?: Record<string, SchemaMetadata>;
+  additionalProperties?: SchemaMetadata | boolean;
 };

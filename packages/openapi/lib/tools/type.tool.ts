@@ -1,5 +1,6 @@
 import isClass from 'is-class';
-import { Reference, Schema } from '../interfaces';
+import { omit } from 'lodash';
+import { Schema } from '../interfaces';
 import { COMMON_METADATA, ReflectTool } from '@fastify-plus/common';
 import { OpenApiExplorer } from '../openapi.explorer';
 
@@ -11,7 +12,7 @@ export class TypeTool {
     [Date, { type: 'string', format: 'date-time' }],
   ]);
 
-  static getSchema(type: Function, isArray = false): Schema | Reference {
+  static getSchema(type: Function, isArray = false): Schema {
     let schema: Schema;
 
     if (isClass(type)) {
@@ -25,7 +26,7 @@ export class TypeTool {
           ...this.getSchema(
             Reflect.getMetadata(COMMON_METADATA.TYPE, type.prototype, k),
           ),
-          ...addition,
+          ...omit(addition, 'required'),
         } as any;
       }
     } else {

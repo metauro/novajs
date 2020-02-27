@@ -1,71 +1,154 @@
 import {
   COMMON_METADATA,
   Klass,
-  ReflectTool,
   ObjectTool,
+  ReflectTool,
 } from '@fastify-plus/common';
-import { OpenApiExplorer, Response } from '@fastify-plus/openapi';
-import { Http2Response, HttpResponse } from '../http-response';
-import { ControllerRoute } from '../interfaces';
+import {
+  OPENAPI_METADATA,
+  OpenApiExplorer,
+  OperationMetadata,
+  Parameter,
+  ParameterMetadata,
+  RequestBody,
+} from '@fastify-plus/openapi';
+import {
+  ApplicationContext,
+  ControllerRoute,
+  ControllerRouteParam,
+} from '../interfaces';
 import { RouteSchema } from 'fastify';
 import { cloneDeep } from 'lodash';
+import { CORE_METADATA } from '../constants';
 
 export class ControllerExplorer {
-  static explorePath(controller: Klass) {
-    return OpenApiExplorer.explorePath(controller.type);
+  static create(ctx: ApplicationContext) {
+    return new ControllerExplorer(ctx);
   }
+
+  constructor(protected readonly ctx: ApplicationContext) {}
 
   static exploreRoutes(controller: Klass): ControllerRoute[] {
     const c = controller.type.prototype;
     return ReflectTool.getOwnDecoratedFunctionKeys(c)
-      .map(k =>
-        OpenApiExplorer.exploreOperation(c[k])
+      .map(k => {
+        const operation = c[k];
+        const metadata = ReflectTool.getMetadata<OperationMetadata>(
+          OPENAPI_METADATA.API_OPERATION,
+          operation,
+        );
+        return metadata
           ? {
-              ...OpenApiExplorer.exploreOperation(c[k]),
+              ...metadata,
+              path: OpenApiExplorer.explorePath(controller.type, operation)
+                /**
+                 * most nodejs route define path variable such as :id, but openapi use {id}
+                 * need transform it
+                 */
+                .replace(/{(.*)}\/?/, (_, match) => {
+                  return `:${match}`;
+                }),
               controller,
               key: k,
               handler: c[k],
             }
-          : null,
-      )
+          : null;
+      })
       .filter(v => !!v);
   }
 
-  static exploreRouteParams(route: ControllerRoute): string[] {
+  static exploreRouteParams(route: ControllerRoute): ControllerRouteParam[] {
     const c = route.controller.type.prototype;
-    const requestParams = OpenApiExplorer.exploreRequestParameters(
+    const requestParams =
+      ReflectTool.getOwnMetadata<ParameterMetadata[]>(
+        OPENAPI_METADATA.API_REQUEST_PARAMETER,
+        c,
+        route.handler.name,
+      ) || [];
+    const requestBodies =
+      ReflectTool.getOwnMetadata<RequestBody[]>(
+        OPENAPI_METADATA.API_REQUEST_BODY,
+        c,
+        route.handler.name,
+      ) || [];
+
+    return ReflectTool.getOwnMetadata(
+      COMMON_METADATA.PARAM_TYPES,
       c,
-      route.key,
-    );
-    const requestBodies = OpenApiExplorer.exploreRequestBodies(c, route.key);
-    return Reflect.getMetadata(COMMON_METADATA.PARAM_TYPES, c, route.key).map(
-      (type, i) => {
-        const requestParam = requestParams[i];
-        const requestBody = requestBodies[i];
-        const keys = [];
+      route.handler.name,
+    ).map((type, i) => {
+      const requestParam = requestParams[i];
+      const requestBody = requestBodies[i];
+      const keys = [];
+      const result = {} as ControllerRouteParam;
 
-        if (type === HttpResponse || type === Http2Response) {
-          keys.push('response');
-        } else {
-          keys.push('request');
-        }
+      if (
+        (ReflectTool.getOwnMetadata<boolean[]>(
+          CORE_METADATA.REQ,
+          c,
+          route.handler.name,
+        ) || [])[i]
+      ) {
+        keys.push('request');
+      } else if (
+        (ReflectTool.getOwnMetadata<boolean[]>(
+          CORE_METADATA.RES,
+          c,
+          route.handler.name,
+        ) || [])[i]
+      ) {
+        keys.push('response');
+      } else if (requestParam) {
+        keys.push(
+          'requestAdapter',
+          `${
+            {
+              header: 'getHeader',
+              cookie: 'getCookie',
+              path: 'getParam',
+              query: 'getQuery',
+            }[requestParam.in]
+          }${requestParam.schema ? `('${requestParam.name}')` : '()'}`,
+        );
+        result.in = requestParam.in;
+        result.name = requestParam.name;
+      } else if (requestBody) {
+        result.in = 'body';
+        keys.push('requestAdapter', 'getBody()');
+      }
 
-        if (requestParam) {
-          keys.push(
-            requestParam.in === 'path'
-              ? 'params'
-              : requestParam.in === 'header'
-              ? 'headers'
-              : requestParam.in,
-          );
-          requestParam.schema && keys.push(requestParam.name);
-        } else if (requestBody) {
-          keys.push('body');
-        }
+      result.inPath = keys.join('.');
+      console.log(result.inPath);
 
-        return keys.join('.');
-      },
-    );
+      return result;
+    });
+  }
+
+  exploreRouteSchema(route: ControllerRoute): RouteSchema {
+    const target = this.ctx.openApi.paths[route.path][route.method];
+    const extractParams = (place: Array<Parameter['in']>) => {
+      const properties = target.parameters.filter(
+        p => 'in' in p && place.includes(p.in),
+      ) as Parameter[];
+
+      return {
+        type: 'object',
+        properties: properties.reduce((result, p) => {
+          result[p.name] = p.schema;
+          return result;
+        }, {}),
+        required: properties.filter(p => p.required).map(p => p.name),
+      };
+    };
+
+    return {
+      headers: extractParams(['header', 'cookie']),
+      querystring: extractParams(['query']),
+      params: extractParams(['path']),
+      body:
+        target.requestBody.content[Object.keys(target.requestBody.content)[0]]
+          .schema,
+    };
   }
 
   static exploreRouteSchema(route: ControllerRoute): RouteSchema {
@@ -79,20 +162,22 @@ export class ControllerExplorer {
     const response = {} as any;
     const c = route.controller.type.prototype;
 
-    for (const p of OpenApiExplorer.exploreRequestBodies(c, route.key)) {
-      if (!p) {
-        continue;
-      }
-
-      body = cloneDeep(p.content[Object.keys(p.content)[0]].schema);
-      ObjectTool.walk(body, (key, val, obj) => {
-        if (key === 'required' && typeof val === 'boolean') {
-          delete obj[key];
-        }
-      });
+    const requestBody = OpenApiExplorer.exploreRequestBody(c, route.handler);
+    if (requestBody) {
+      body = cloneDeep(
+        requestBody.content[Object.keys(requestBody.content)[0]].schema,
+      );
     }
+    ObjectTool.walk(body, (key, val, obj) => {
+      if (key === 'required' && typeof val === 'boolean') {
+        delete obj[key];
+      }
+    });
 
-    for (const p of OpenApiExplorer.exploreRequestParameters(c, route.key)) {
+    for (const p of OpenApiExplorer.exploreRequestParameters(
+      c,
+      route.handler,
+    )) {
       if (!p || !paramKeyMap[p.in]) {
         continue;
       }
@@ -111,15 +196,15 @@ export class ControllerExplorer {
     }
 
     const responses = OpenApiExplorer.exploreResponses(route.handler);
-    for (const k of Object.keys(responses)) {
-      const r = responses[k] as Response;
-      response[k] = cloneDeep(r.content[Object.keys(r.content)[0]].schema);
-      ObjectTool.walk(response[k], (key, val, obj) => {
-        if (key === 'required' && typeof val === 'boolean') {
-          delete obj[key];
-        }
-      });
-    }
+    // for (const k of Object.keys(responses)) {
+    //   const r = responses[k] as Response;
+    //   response[k] = cloneDeep(r.content[Object.keys(r.content)[0]].schema);
+    //   ObjectTool.walk(response[k], (key, val, obj) => {
+    //     if (key === 'required' && typeof val === 'boolean') {
+    //       delete obj[key];
+    //     }
+    //   });
+    // }
 
     return {
       body,

@@ -1,15 +1,27 @@
-### OpenApi Specification
+### @fastify-plus/openapi
 
-this package define the api schema and export common decorators
+OpenAPI v3.0 Specification Implementation
 
-### Define Api
+See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md
+
+### Usage
+####  Define Api
 
 ```typescript
+import {
+  ApiTag,
+  ApiPost,
+  ApiGet,
+  ApiOkResponse,
+  ApiRequestBody,
+  ApiRequestQuery,
+} from '@fastify-plus/openapi';
+import { UserSchema } from '../schema/user.schame';
+
 // optional tag, default is class name
 @ApiTag('User')
-@Controller('users')
-class UserController {
-  @Post({ description: 'create a new user' })
+export class UserController {
+  @ApiPost({ description: 'create a new user' })
   @ApiOkResponse({ type: Number, description: 'return created user id' })
   async createUser(
     @ApiRequestBody({ description: 'user schema' }) userSchema: UserSchema,
@@ -17,17 +29,23 @@ class UserController {
     return 1;
   }
 
-  @Get()
+  @ApiGet()
   @ApiOkResponse({ type: UserSchema })
   async getUser(@ApiRequestQuery() id: number) {
     return new UserSchema();
   }
 }
+```
+
+#### Define Schema
+
+```typescript
+import { ApiSchema } from '@fastify-plus/openapi';
 
 @ApiSchema({ description: 'user' })
-class UserSchema {
+export class UserSchema {
   @ApiSchema({
-    description: 'user id',
+    description: 'user id, required if update',
     required: false,
   })
   id?: number;

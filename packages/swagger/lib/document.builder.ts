@@ -1,16 +1,22 @@
 import fastifySwagger from 'fastify-swagger';
-import { merge, defaults } from 'lodash';
-import { FastifyPlusApplication } from '@fastify-plus/core';
+import expressSwagger from 'swagger-ui-express';
+import yaml from 'js-yaml';
+import { defaults, merge } from 'lodash';
+import { Application } from '@fastify-plus/core';
 import {
   Info,
   OpenApi,
   OpenApiScanner,
   Responses,
 } from '@fastify-plus/openapi';
-import { internalLoggerService, ObjectTool } from '@fastify-plus/common';
+import { LoggerService, ObjectTool } from '@fastify-plus/common';
+import { FastifyApplicationAdapter } from '@fastify-plus/platform-fastify';
+import { ExpressApplicationAdapter } from '@fastify-plus/platform-express';
 
 export class DocumentBuilder {
-  static create(app: FastifyPlusApplication) {
+  private static logger = new LoggerService(`swagger ${DocumentBuilder.name}`);
+
+  static create(app: Application) {
     return new DocumentBuilder(app);
   }
 
@@ -19,7 +25,7 @@ export class DocumentBuilder {
     basePath: string;
     schemes: string[];
   } = {
-    openapi: '3.0.2',
+    openapi: '',
     info: {
       title: '',
       version: '',
@@ -33,7 +39,7 @@ export class DocumentBuilder {
 
   protected hasGlobalResponses = false;
 
-  constructor(protected readonly app: FastifyPlusApplication) {
+  constructor(protected readonly app: Application) {
     const { klasses } = app.getContext();
     merge(this.document, OpenApiScanner.scan(klasses));
     this.resetNonsupportFormat();
@@ -77,7 +83,7 @@ export class DocumentBuilder {
     return this;
   }
 
-  setSchemes(schemes: Array<'http' | 'https' | string>) {
+  setSchemes(schemes: Array<'server' | 'https' | string>) {
     this.document.schemes = schemes;
     return this;
   }
@@ -106,14 +112,54 @@ export class DocumentBuilder {
       });
     }
 
-    internalLoggerService.info('map swagger to /api-doc');
-    this.app.getFastifyInstance().register(fastifySwagger, {
-      mode: 'static',
-      specification: {
-        document: this.document,
-      },
-      exposeRoute: true,
-      routePrefix: '/api-doc',
-    });
+    const docsPath = '/api-docs';
+    const jsonPath = '/api-json';
+    const yamlPath = '/api-yaml';
+    const jsonDoc = this.document;
+    const yamlDoc = yaml.dump(this.document);
+    const { adapter } = this.app.getContext();
+
+    DocumentBuilder.logger.info(`map swagger document to ${docsPath}`);
+    DocumentBuilder.logger.info(`map swagger json to ${jsonPath}`);
+    DocumentBuilder.logger.info(`map swagger yaml to ${yamlPath}`);
+
+    if (adapter instanceof FastifyApplicationAdapter) {
+      adapter.server.register(fastifySwagger as any, {
+        mode: 'static',
+        specification: {
+          document: this.document,
+        },
+        exposeRoute: true,
+        routePrefix: docsPath,
+      });
+      adapter.server.route({
+        method: 'GET',
+        url: jsonPath,
+        handler: (req, reply) => {
+          reply.header('Content-Type', 'application/json').send(jsonDoc);
+        },
+      });
+      adapter.server.route({
+        method: 'GET',
+        url: yamlPath,
+        handler: (req, reply) => {
+          reply.header('Content-Type', 'text/x-yaml').send(yamlDoc);
+        },
+      });
+    } else if (adapter instanceof ExpressApplicationAdapter) {
+      adapter.server.use(
+        docsPath,
+        expressSwagger.serve,
+        expressSwagger.setup(this.document),
+      );
+      adapter.server.get(jsonPath, (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(jsonDoc);
+      });
+      adapter.server.get(yamlPath, (req, res) => {
+        res.setHeader('Content-Type', 'text/x-yaml');
+        res.send(yamlDoc);
+      });
+    }
   }
 }

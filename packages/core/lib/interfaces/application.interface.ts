@@ -1,24 +1,16 @@
-import {
-  FastifyInstance,
-  ServerOptionsAsHttp,
-  ServerOptionsAsHttp2,
-  ServerOptionsAsSecureHttp,
-  ServerOptionsAsSecureHttp2,
-} from 'fastify';
 import { ReflectiveInjector } from 'injection-js';
-import { Klass } from '@fastify-plus/common';
+import { Klass, LogLevel } from '@fastify-plus/common';
+import { ApplicationAdapter } from '../adapter';
+import { OpenApi } from '@fastify-plus/openapi';
 
 export type ApplicationOptions = {
   appRootPath: string;
-  fastifyOptions?:
-    | ServerOptionsAsHttp
-    | ServerOptionsAsSecureHttp
-    | ServerOptionsAsHttp2
-    | ServerOptionsAsSecureHttp2;
+  adapter: ApplicationAdapter;
+  logLevel?: LogLevel;
 };
 
 export type ApplicationContext = {
-  http: FastifyInstance;
   klasses: Klass[];
   injector: ReflectiveInjector;
-} & ApplicationOptions;
+  openApi: OpenApi;
+} & Required<ApplicationOptions>;

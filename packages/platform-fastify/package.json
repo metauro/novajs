@@ -1,0 +1,23 @@
+{
+  "name": "@fastify-plus/platform-fastify",
+  "version": "0.2.0-alpha.0",
+  "description": "modern fastify (@platform-fastify)",
+  "author": "zhongyuanjia",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "fastify": "^2.12.0",
+    "url-join": "^4.0.1",
+    "utility-types": "^3.10.0"
+  },
+  "gitHead": "6bb6604fee80a9fd242b5085b8e526fcdee5983a",
+  "devDependencies": {}
+}

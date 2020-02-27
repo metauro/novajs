@@ -19,6 +19,10 @@ export class LoggerService implements ILogger {
     this.options = options;
   }
 
+  static override<T extends ILogger>(logger: T) {
+    LoggerService.instance = logger;
+  }
+
   static debug(message: string | object, options = this.options) {
     this.log('debug', message, options);
   }
@@ -55,10 +59,6 @@ export class LoggerService implements ILogger {
 
   setOptions(options: LoggerOptions) {
     this.options = options;
-  }
-
-  override<T extends ILogger>(logger: T) {
-    LoggerService.instance = logger;
   }
 
   debug(message: string | object) {
