@@ -1,4 +1,10 @@
-import { COMMON_METADATA, HttpStatus, Klass, ReflectTool } from '@sojs/common';
+import {
+  COMMON_METADATA,
+  HttpStatus,
+  Klass,
+  ReflectTool,
+  HttpException,
+} from '@sojs/common';
 import {
   OPENAPI_METADATA,
   OpenApiExplorer,
@@ -167,7 +173,11 @@ return new Promise((resolve, reject) => {
           httpAdapter.setStatus(HttpStatus.OK).send(result);
         }
       } catch (err) {
-        httpAdapter.setStatus(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+        if (err instanceof HttpException) {
+          httpAdapter.setStatus(err.response.statusCode).send(err.response);
+        } else {
+          httpAdapter.setStatus(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
+        }
       }
     };
   }
