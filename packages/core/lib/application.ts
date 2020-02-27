@@ -32,7 +32,6 @@ export class Application<
     const controllerExplorer = new ControllerExplorer(ctx);
     for (const controller of ControllerScanner.scan(ctx.klasses)) {
       for (const route of controllerExplorer.exploreRoutes(controller)) {
-        console.log('get route:', JSON.stringify(route, null, 2));
         this.ctx.adapter.route(route);
         Application.logger.info(
           `map route to [method: ${route.method}] [path: ${route.path}]`,
