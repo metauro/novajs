@@ -1,6 +1,6 @@
 {
   "name": "@sojs/analyzer",
-  "version": "0.2.0-alpha.0",
+  "version": "0.3.0",
   "description": "modern fastify (@analyzer)",
   "author": "zhongyuanjia",
   "license": "MIT",

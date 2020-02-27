@@ -1,6 +1,6 @@
 {
   "name": "@sojs/platform-fastify",
-  "version": "0.2.0-alpha.0",
+  "version": "0.3.0",
   "description": "modern fastify (@platform-fastify)",
   "author": "zhongyuanjia",
   "license": "MIT",
@@ -18,6 +18,5 @@
     "url-join": "^4.0.1",
     "utility-types": "^3.10.0"
   },
-  "gitHead": "6bb6604fee80a9fd242b5085b8e526fcdee5983a",
-  "devDependencies": {}
+  "gitHead": "6bb6604fee80a9fd242b5085b8e526fcdee5983a"
 }
