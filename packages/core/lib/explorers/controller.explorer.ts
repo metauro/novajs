@@ -1,9 +1,8 @@
 import {
   COMMON_METADATA,
-  Klass,
-  ObjectTool,
-  ReflectTool,
   HttpStatus,
+  Klass,
+  ReflectTool,
 } from '@novajs/common';
 import {
   OPENAPI_METADATA,
@@ -19,7 +18,6 @@ import {
   ControllerRouteParam,
 } from '../interfaces';
 import { RouteSchema } from 'fastify';
-import { cloneDeep } from 'lodash';
 import { CORE_METADATA } from '../constants';
 
 export class ControllerExplorer {
@@ -203,68 +201,6 @@ return new Promise((resolve, reject) => {
       body:
         target.requestBody.content[Object.keys(target.requestBody.content)[0]]
           .schema,
-    };
-  }
-
-  static exploreRouteSchema(route: ControllerRoute): RouteSchema {
-    let body: any;
-    const params = {} as any;
-    const paramKeyMap = {
-      query: 'querystring',
-      path: 'params',
-      header: 'headers',
-    };
-    const response = {} as any;
-    const c = route.controller.type.prototype;
-
-    const requestBody = OpenApiExplorer.exploreRequestBody(c, route.handler);
-    if (requestBody) {
-      body = cloneDeep(
-        requestBody.content[Object.keys(requestBody.content)[0]].schema,
-      );
-    }
-    ObjectTool.walk(body, (key, val, obj) => {
-      if (key === 'required' && typeof val === 'boolean') {
-        delete obj[key];
-      }
-    });
-
-    for (const p of OpenApiExplorer.exploreRequestParameters(
-      c,
-      route.handler,
-    )) {
-      if (!p || !paramKeyMap[p.in]) {
-        continue;
-      }
-
-      const key = paramKeyMap[p.in];
-
-      if (!params[key]) {
-        params[key] = {
-          type: 'object',
-          required: [],
-          properties: {},
-        };
-      }
-      params[key].properties[p.name] = p.schema;
-      p.required && params[key].required.push(p.name);
-    }
-
-    // const responses = OpenApiExplorer.exploreResponses(route.handler);
-    // for (const k of Object.keys(responses)) {
-    //   const r = responses[k] as Response;
-    //   response[k] = cloneDeep(r.content[Object.keys(r.content)[0]].schema);
-    //   ObjectTool.walk(response[k], (key, val, obj) => {
-    //     if (key === 'required' && typeof val === 'boolean') {
-    //       delete obj[key];
-    //     }
-    //   });
-    // }
-
-    return {
-      body,
-      ...params,
-      response,
     };
   }
 }
